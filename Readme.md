@@ -4,9 +4,11 @@
 
 This is a gross oversimplification, but traditional experiments are input-driven and open loop, which makes data collection and analysis relatively straight forward.
 
-If you want to do closed loop, input-output experiments, things get suddenly very complicated thanks to emergent complexity and chaos. But these experiments are more fun.
+If you want to do closed loop, input-output experiments, things get suddenly very complicated thanks to emergent complexity and chaos. But these experiments are more fun. But if you try to run it all by hand or in the traditional ways, you'll end up like Spongebob
 
-To make these experiments more tractable, I;ve made variaous tools on and off. This repo collects all of them here.
+![](Images/spongebob.gif)
+
+To make these experiments more tractable, I've made variaous tools on and off. This repo collects all of them here.
 
 ##### What this is
 This is a collection of tools collected from a bunch of different experiments and across time. They reflect an approach to running things in the MRI. These tools each all simplify or make possible some aspect of complex closed-loop experiments.
