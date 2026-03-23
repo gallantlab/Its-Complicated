@@ -1,4 +1,4 @@
-### It's Complicated
+## It's Complicated
 
 \<Insert Avril Lavigne reference here>
 
@@ -15,3 +15,27 @@ This is a collection of tools collected from a bunch of different experiments an
 This is not a suite of tools that lets you plop in a scientific idea and just run it. That's... not feasible given how each unique situation is. 
 
 In fact, some of these tools intentially will not compile, or will segfault if you try to run them out of the box. These tools rather give you perspective on how to tackle the chaos that closed-loop/complex experiments create.
+
+
+### Unreal Plugins
+#### MRIExperiment
+This is lifted out of the driving simulator. These things take care of the experiment logic framework in Unreal that makes all the things possible.
+
+#### Eyelink
+This is a plugin that will talk to an Eyelink system and display calibration stuff.
+
+
+### Standalone Programs
+#### GameMonitor
+A thing that will talk to Eyelink, log the state of a controller, and also start/stop OBS screen recordings
+
+#### SharpEyes
+Because eyetracking is messy, this lets you manually correct eyetracking stuff, and also has a model-free gaze mapping, if you have the raw videos and know where the calibration dots are.
+
+
+### Python libraries
+#### Driving-utilities
+A thing that can deal with the frames rendered out by the game engine and make useful features out of them
+
+#### Demofiles
+A thing to read demofiles put out by Source Engine-based games
