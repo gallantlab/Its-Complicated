@@ -20,6 +20,7 @@ In fact, some of these tools intentially will not compile, or will segfault if y
 
 
 ### Unreal Plugins
+These things here help you build an experiment from the ground-up in Unreal Engine. Obviously, you can lift the logic and apply it to other engines like Unity.
 #### MRIExperiment
 This is lifted out of the driving simulator. These things take care of the experiment logic framework in Unreal that makes all the things possible.
 
@@ -28,6 +29,7 @@ This is a plugin that will talk to an Eyelink system and display calibration stu
 
 
 ### Standalone Programs
+These things are helpers for when you run your experiment.
 #### [GameMonitor](https://github.com/gallantlab/gamemonitor)
 A thing that will talk to Eyelink, log the state of a controller, and also start/stop OBS screen recordings
 
@@ -36,6 +38,7 @@ Because eyetracking is messy, this lets you manually correct eyetracking stuff, 
 
 
 ### Python libraries
+These things are help for taking your outputs and pulling numbers out of them so you can do science.
 #### [Driving-utilities](https://github.com/candytaco/driving-utilities)
 A thing that can deal with the frames rendered out by the game engine and make useful features out of them
 
