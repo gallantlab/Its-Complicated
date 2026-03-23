@@ -4,7 +4,7 @@
 
 This is a gross oversimplification, but traditional experiments are input-driven and open loop, which makes data collection and analysis relatively straight forward.
 
-If you want to do closed loop, input-output experiments, things get suddenly very complicated thanks to emergent complexity and chaos. But these experiments are more fun. But if you try to run it all by hand or in the traditional ways, you'll end up like Spongebob
+If you want to do closed loop, input-output experiments, things get suddenly very complicated thanks to emergent complexity and chaos. But these experiments are more fun. But if you try to run it all by hand or in the traditional ways, you'll end up like Spongebob.
 
 ![](Images/spongebob.gif)
 
@@ -28,16 +28,16 @@ This is a plugin that will talk to an Eyelink system and display calibration stu
 
 
 ### Standalone Programs
-#### GameMonitor
+#### [GameMonitor](https://github.com/gallantlab/gamemonitor)
 A thing that will talk to Eyelink, log the state of a controller, and also start/stop OBS screen recordings
 
-#### SharpEyes
+#### [SharpEyes](https://github.com/candytaco/SharpEyes)
 Because eyetracking is messy, this lets you manually correct eyetracking stuff, and also has a model-free gaze mapping, if you have the raw videos and know where the calibration dots are.
 
 
 ### Python libraries
-#### Driving-utilities
+#### [Driving-utilities](https://github.com/candytaco/driving-utilities)
 A thing that can deal with the frames rendered out by the game engine and make useful features out of them
 
-#### Demofiles
-A thing to read demofiles put out by Source Engine-based games
+#### [Demofiles](https://github.com/gallantlab/demofiles)
+A thing to read demofiles put out by Source Engine-based games. This was started off by James, then I improved upon it, and then Circle Chen (undergrad who I was workign with through Alane for the Portal 2 stuff) improved upon it some more.
