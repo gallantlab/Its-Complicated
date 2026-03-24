@@ -1,0 +1,23 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Eyelink",
+	"Description": "Unreal Interface for SR Research Eyelink systems",
+	"Category": "Science",
+	"CreatedBy": "candytaco",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"Installed": false,
+	"Modules": [
+    {
+      "Name": "Eyelink",
+      "Type": "Runtime",
+      "LoadingPhase": "PreDefault"
+    }
+	]
+}

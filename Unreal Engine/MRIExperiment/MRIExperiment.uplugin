@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "MRI Experiment",
+	"Description": "Framework for running human subjects experiments in MRI scanners using Unreal Engine. Provides TTL reception, demo recording/replay, experiment state logging, and frame rendering infrastructure.",
+	"Category": "Science",
+	"CreatedBy": "Gallant Lab",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "MRIExperiment",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	]
+}
