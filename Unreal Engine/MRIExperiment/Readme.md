@@ -1,8 +1,10 @@
 # MRIExperiment Plugin Overview
 
-The MRIExperiment plugin provides a reusable framework for building human subjects experiments that run inside MRI scanners using Unreal Engine. It handles the core infrastructure that every MRI experiment needs: synchronizing with the scanner's TTL trigger pulses, recording and replaying demo files of each experimental run, rendering frames and logging per-frame experiment state from those replays, and managing experiment configuration. The plugin is designed so that experiment-specific logic lives in subclasses that override a small number of virtual methods, while the base classes handle all the plumbing.
+<img width="1849" height="1040" alt="image" src="https://github.com/user-attachments/assets/69882786-2112-46c3-85c5-3bb92543e297" />
 
-The overall data flow is: the subject interacts with an Unreal world while the scanner sends TTL pulses that the Controller tracks. The Controller auto-triggers demo recording on the first TTL and calls `ExperimentTick()` once enough TTLs have arrived for the experiment to begin. Everything the subject does (position, controls, TTL state) is replicated via the State into the demo file. After the session, the Demo Subsystem plays back each recorded demo and spawns a Spectator Controller, which steps through the replay frame-by-frame at a fixed timestep, captures sensor images to disk via the Frame Capture Camera, and logs entity positions and subject state to an XML file via the Logger and Experiment State classes. Settings for all of this are read from an INI config file by the Settings module.
+The MRIExperiment plugin provides a framework for Unreal Engine-based closed loop MRI experiments. It provides logic for recordding TTLs, replicating experiment info, extracting info from recorded demos, and misc config stuff. The is more of a reference than a specific framework to use, but theoretically, you should be able to subclass from these classes and make runnable experiments..
+
+The PlayerController handles UX and also TTLs, since that comes in on a HID object to the computer. Experiemnt-relevant info is replicated. After the session, the Demo Subsystem plays back each recorded demo and spawns a Spectator Controller, which steps through the replay frame-by-frame at a fixed timestep, and writes out info in a human-readable/data-analysis-parsable format. There's also a Setting module for handling runtime experiment configs.
 
 ## Modules
 
