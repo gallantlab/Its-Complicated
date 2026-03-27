@@ -3,4 +3,5 @@
 .github/
 .vscode/
 .idea/
-.site/
+site/
+*.db
