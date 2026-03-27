@@ -29,7 +29,7 @@ FGetInputDelegate UEyelinkInterface::GetInputDelegate;
 
 bool UEyelinkInterface::ValidateEyelinkFileName(const FString name)
 {
-	static const FRegexPattern EyelinkNameFormat("^[A-Za-z0-9][A-Za-z0-9_]{0,7}.edf$");
+	static const FRegexPattern EyelinkNameFormat("^[A-Za-z0-9][A-Za-z0-9_]{0,7}\\.edf$");
 	FRegexMatcher matcher(EyelinkNameFormat, name);
 	return matcher.FindNext();
 }
@@ -60,9 +60,6 @@ static INT16 InputWrap(InputEvent* event)
 	return UEyelinkInterface::GetInputKey((void*)event);
 }
 
-/**
- * @brief
- */
 void UEyelinkInterface::InitEyelinkLibrary()
 {
 	HOOKFCNS eyelinkCallbackFunctions;
@@ -342,6 +339,7 @@ void UEyelinkInterface::UnbindDelegates()
 
 
 // === Delegate calls for the eyelink ===
+
 INT16 UEyelinkInterface::SetupCalibrationDisplay()
 {
 	if (UEyelinkInterface::SetupCalibrationDisplayDelegate.IsBound())
