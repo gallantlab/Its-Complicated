@@ -34,7 +34,7 @@ FGetInputDelegate UEyelinkInterface::GetInputDelegate;
  */
 bool UEyelinkInterface::ValidateEyelinkFileName(const FString name)
 {
-	static const FRegexPattern EyelinkNameFormat("^[A-Za-z0-9][A-Za-z0-9_]{0,7}.edf$");
+	static const FRegexPattern EyelinkNameFormat("^[A-Za-z0-9][A-Za-z0-9_]{0,7}\\.edf$");
 	FRegexMatcher matcher(EyelinkNameFormat, name);
 	return matcher.FindNext();
 }
