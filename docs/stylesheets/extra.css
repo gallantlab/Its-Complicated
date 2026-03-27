@@ -1,0 +1,19 @@
+/* Remove the max-width cap on the grid so content fills the full viewport width */
+.md-grid {
+	max-width: 100%;
+}
+
+/* Prevent font size from scaling up on wide monitors.
+   The theme bumps html font-size at 100em and 125em breakpoints;
+   locking it to the default 125% keeps text the same size regardless of viewport width. */
+@media screen and (min-width: 100em) {
+	html {
+		font-size: 125%;
+	}
+}
+
+@media screen and (min-width: 125em) {
+	html {
+		font-size: 125%;
+	}
+}
