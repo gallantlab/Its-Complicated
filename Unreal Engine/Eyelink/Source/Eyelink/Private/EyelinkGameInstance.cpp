@@ -5,10 +5,6 @@
 #include "EyelinkInterface.h"
 
 
-/**
- * Constructs the game instance, creates the EyelinkInterface subobject, and
- * initializes the Eyelink C library so the device is ready before gameplay begins.
- */
 UEyelinkGameInstance::UEyelinkGameInstance()
 {
 	// Eyelink
@@ -19,10 +15,6 @@ UEyelinkGameInstance::UEyelinkGameInstance()
 	Eyelink->InitEyelinkLibrary();
 }
 
-/**
- * Gracefully shuts down the Eyelink device before the game instance is destroyed.
- * Stops any active recording, closes the open data file, and disconnects from the device.
- */
 void UEyelinkGameInstance::Shutdown()
 {
 	if (Eyelink->IsEyelinkConnected())
