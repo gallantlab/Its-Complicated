@@ -9,10 +9,14 @@
 DECLARE_LOG_CATEGORY_EXTERN(LogEyelink, Log, All);
 
 /**
- * Primary module class for the Eyelink plugin.
+ * A plugin that interfaces with an Eyelink via the C api
  *
- * Implements the IModuleInterface lifecycle callbacks so that Unreal Engine
- * can load and unload the plugin at the appropriate times.
+ * The Eyelink SDK make strong assumptions that the user will be writing linear programs, 
+ * which does _not_ match with how we make complex, object-oriented modern programs, esp. in Unreal. 
+ * This plugin wraps the Eyelink C library in UEyelinkInterface, which exposes basic Eyelink functions
+ * as delegates and Blueprint-callable functions. Because the Eyelink C library is not designed 
+ * to be initialized more than once per process, the module/Interface should be a singleton to
+ * keeping the interface alive for the full GameInstance lifecycle.
  */
 class FEyelinkModule : public IModuleInterface
 {

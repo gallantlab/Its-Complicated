@@ -28,8 +28,8 @@ public:
 	/**
 	 * Binds this widget's drawing functions to the provided Eyelink interface object.
 	 *
-	 * After calling this, the Eyelink library will invoke the Blueprint-implementable
-	 * events on this widget when calibration display changes are needed.
+	 * After calling this, the Eyelink library's calls to draw things will be bound to
+	 * the blueprint events implemented in this widget.
 	 * @param eyelink  The EyelinkInterface to bind delegates on.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")

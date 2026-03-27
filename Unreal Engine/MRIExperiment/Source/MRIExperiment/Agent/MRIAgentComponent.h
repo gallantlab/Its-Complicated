@@ -1,4 +1,9 @@
-// MRI Experiment Plugin - Base Agent Component
+// Copyright (c) Gallant Lab. All Rights Reserved.
+//
+// Portions of this file are adapted from the CARLA open-source autonomous driving simulator
+// (https://github.com/carla-simulator/carla).
+// Copyright (c) 2017 Computer Vision Center (CVC) at the Universitat Autonoma de Barcelona (UAB).
+// Licensed under the MIT License (https://opensource.org/licenses/MIT).
 
 #pragma once
 
@@ -7,10 +12,10 @@
 #include "MRIAgentComponent.generated.h"
 
 /**
- * Abstract base component for all MRI experiment agents (subjects, NPCs, etc.).
+ * Abstract base component for all MRI experiment agents (subject pawn, NPCs, etc.).
  *
  * Attach subclasses of this component to any Actor that should be tracked and
- * visited by the logging system. During BeginPlay the component registers
+ * visited by the logging system. During BeginPlay, the component registers
  * itself with the agent registry (if bRegisterAgentComponent is true), and
  * during EndPlay it deregisters itself automatically.
  *
@@ -25,14 +30,14 @@ class MRIEXPERIMENT_API UMRIAgentComponent : public USceneComponent
 public:
 
 	/**
-	 * Constructs the component. Disables per-tick updates since agents are
-	 * polled on demand by the logging system rather than ticked independently.
+	 * Constructs the component. 
 	 * @param ObjectInitializer  Unreal object initializer forwarded to the parent class.
 	 */
 	UMRIAgentComponent(const FObjectInitializer &ObjectInitializer);
 
 	/**
 	 * Returns a unique identifier for this component instance derived from its pointer hash.
+	 * This is used to tell two instances of the same class apart, e.g. two cars
 	 * @return Hashed pointer value used as a stable per-instance ID.
 	 */
 	uint32 GetId() const

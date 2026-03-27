@@ -45,7 +45,7 @@ public:
 	AMRISubjectState();
 
 	/**
-	 * Resets the player state to its initial values (Unreal override).
+	 * Resets the player state to its initial values.
 	 * Also calls ResetExperimentState to clear experiment-specific fields.
 	 */
 	virtual void Reset() override;
@@ -57,14 +57,16 @@ public:
 	virtual void ResetExperimentState();
 
 	/**
-	 * Copies replicated properties from another player state (Unreal override).
+	 * Copies replicated properties from another player state.
 	 * Used during seamless travel to preserve state across level transitions.
 	 * @param playerState  Source player state to copy from.
 	 */
 	virtual void CopyProperties(APlayerState *playerState) override;
 
 	/**
-	 * Registers which properties are replicated to clients (Unreal override).
+	 * Registers which properties are replicated.
+	 * **IMPORTANT** In the implementation, you **MUST** call DOREPLIFETIME for each replicated property, 
+	  * or it won't be replicated and you can't read it back out later!
 	 * @param outLifetimeProps  Output array to populate with replication rules.
 	 */
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &outLifetimeProps) const override;
@@ -110,7 +112,7 @@ public:
 	}
 
 	/**
-	 * Returns whether a TTL pulse is currently active.
+	 * Returns whether a The TTL is currently pressed.
 	 * @return true if the TTL flag is set.
 	 */
 	UFUNCTION(BlueprintCallable)
@@ -161,7 +163,7 @@ public:
 
 	/**
 	 * Returns elapsed seconds between demo start and the first TTL of this run.
-	 * @return Time in seconds from demo start to first TTL pulse.
+	 * @return Time in seconds from demo start to first TTL.
 	 */
 	UFUNCTION(BlueprintCallable)
 	float GetSecondsToStartOfRun() const
@@ -213,27 +215,27 @@ private:
 	UPROPERTY(Replicated)
 	FTransform Transform;
 
-	/** True while a TTL pulse is active (scanner trigger held), replicated. */
+	/** True while a TTL input is down on this frame. */
 	UPROPERTY(Replicated)
 	bool TTL = false;
 
-	/** Total number of TTL pulses received since the start of the experiment, replicated. */
+	/** Total number of TTLs received since the start of the experiment */
 	UPROPERTY(Replicated)
 	int TotalTTLs = 0;
 
-	/** True while the synchronization beep sound is playing, replicated. */
+	/** True while the synchronization beep is playing, */
 	UPROPERTY(Replicated)
 	bool PlayBeep = false;
 
-	/** Seconds elapsed from demo start to the first TTL pulse of this run, replicated. */
+	/** Seconds elapsed from demo start to the first TTL of this run */
 	UPROPERTY(Replicated)
 	float secondsToStartOfRun = 0.0;
 
-	/** Subject's accumulated score for this run, replicated. */
+	/** Subject's accumulated score for this run */
 	UPROPERTY(Replicated)
 	int Points = 0;
 
-	/** Type of on-screen prompt currently displayed to the subject, replicated. */
+	/** Type of on-screen prompt currently displayed to the subject*/
 	UPROPERTY(Replicated)
 	EDisplayedPromptType displayedPromptType = EDisplayedPromptType::None;
 

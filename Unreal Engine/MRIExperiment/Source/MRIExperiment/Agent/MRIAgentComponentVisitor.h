@@ -1,4 +1,9 @@
-// MRI Experiment Plugin - Agent Component Visitor Interface
+// Copyright (c) Gallant Lab. All Rights Reserved.
+//
+// Portions of this file are adapted from the CARLA open-source autonomous driving simulator
+// (https://github.com/carla-simulator/carla).
+// Copyright (c) 2017 Computer Vision Center (CVC) at the Universitat Autonoma de Barcelona (UAB).
+// Licensed under the MIT License (https://opensource.org/licenses/MIT).
 
 #pragma once
 
@@ -18,8 +23,7 @@ public:
 	 * Reads relevant state information from the given agent component.
 	 *
 	 * Called by UMRIAgentComponent::AcceptVisitor. Subclasses of UMRIAgentComponent
-	 * may override AcceptVisitor to call typed Visit overloads, enabling visitors to
-	 * distinguish between different agent types.
+	 * should override AcceptVisitor to call typed Visit overloads so we record appropriate info
 	 * @param agent  The agent component whose state should be recorded.
 	 */
 	virtual void Visit(const UMRIAgentComponent &) = 0;

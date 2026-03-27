@@ -1,4 +1,9 @@
 // Copyright (c) Gallant Lab. All Rights Reserved.
+//
+// Portions of this file are adapted from the CARLA open-source autonomous driving simulator
+// (https://github.com/carla-simulator/carla).
+// Copyright (c) 2017 Computer Vision Center (CVC) at the Universitat Autonoma de Barcelona (UAB).
+// Licensed under the MIT License (https://opensource.org/licenses/MIT).
 
 #pragma once
 
@@ -21,8 +26,6 @@ enum class EExperimentType : uint8
 
 /**
  * Utility class providing string conversion and numeric casting for EExperimentType.
- *
- * All methods are static; this class is not intended to be instantiated.
  */
 UCLASS(BlueprintType)
 class MRIEXPERIMENT_API UExperimentType : public UObject
@@ -35,16 +38,16 @@ public:
 	using uint_type = typename std::underlying_type<EExperimentType>::type;
 
 	/**
-	 * Parses an EExperimentType value from its display-name string.
+	 * Parses an EExperimentType value from its display name.
 	 * @param String  The string representation of the experiment type.
 	 * @return The matching EExperimentType value, or EExperimentType::Other if unrecognized.
 	 */
 	static EExperimentType FromString(const FString &String);
 
 	/**
-	 * Returns the display-name string for the given experiment type.
+	 * Returns the display name for the given experiment type.
 	 * @param ExperimentType  The enum value to convert.
-	 * @return The display name string for that experiment type.
+	 * @return The display name for that experiment type.
 	 */
 	static FString ToString(EExperimentType ExperimentType);
 
@@ -127,7 +130,7 @@ public:
 	void LogSettings() const;
 
 	/**
-	 * Applies the given display resolution via the console command system.
+	 * Try to set the current display resolution.
 	 * @param Width       Desired display width in pixels.
 	 * @param Height      Desired display height in pixels.
 	 * @param Fullscreen  If true, switches to fullscreen mode.
@@ -147,11 +150,11 @@ public:
 
 public:
 
-	/** Subject identifier string (e.g. participant code) written to log files. */
+	/** Subject identifier / participant code. */
 	UPROPERTY(Category = "MRI", EditAnywhere, BlueprintReadWrite)
 	FString Subject;
 
-	/** If true, demo recording begins automatically on the first TTL pulse. */
+	/** If true, demo recording begins automatically on the first TTL. */
 	UPROPERTY(Category = "MRI", EditAnywhere, BlueprintReadWrite)
 	bool AutoTriggerDemoRecording = true;
 
@@ -163,23 +166,23 @@ public:
 	UPROPERTY(Category = "MRI", EditAnywhere, BlueprintReadWrite)
 	float SecondsToDemoStop = 0.0f;
 
-	/** If true, sensors (cameras) are only active during replay, not during live recording. */
+	/** If true, rendering is only enabled during replay, not during the experiment. */
 	UPROPERTY(Category = "MRI", VisibleAnywhere, BlueprintReadOnly)
 	bool SensorsOnlyOnReplay = true;
 
-	/** Display resolution string in Unreal format (e.g. "1280x800w" for windowed). */
+	/** Display resolution string in Unreal format (<Width>x<Height>[w|f]). */
 	UPROPERTY(Category = "MRI", EditAnywhere, BlueprintReadWrite)
 	FString Resolution = TEXT("1280x800w");
 
-	/** Number of replays to auto-render on startup (0 = disabled). */
+	/** Autorendering flag; 0 is disabled. Any value is the framerate to render at */
 	UPROPERTY(Category = "MRI", VisibleAnywhere, BlueprintReadOnly)
 	int RenderAll = 0;
 
-	/** Number of TTL pulses to wait for before experiment logic begins each run. */
+	/** Number of TTLs to wait for before experiment logic begins each run. */
 	UPROPERTY(Category = "MRI", EditAnywhere, BlueprintReadWrite)
 	int TTLsBeforeExperimentStart = 5;
 
-	/** If true, semantic segmentation sensor images are captured during replay. */
+	/** DO we do semseg on this current lifecycle?. */
 	UPROPERTY(Category = "Sensors", VisibleAnywhere, BlueprintReadOnly)
 	bool bSemanticSegmentationEnabled = false;
 

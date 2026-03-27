@@ -1,4 +1,9 @@
-// MRI Experiment Plugin - Frame Capture Camera
+// Copyright (c) Gallant Lab. All Rights Reserved.
+//
+// Portions of this file are adapted from the CARLA open-source autonomous driving simulator,
+// version 0.8.4 (https://github.com/carla-simulator/carla).
+// Copyright (c) 2017 Computer Vision Center (CVC) at the Universitat Autonoma de Barcelona (UAB).
+// Licensed under the MIT License (https://opensource.org/licenses/MIT).
 
 #pragma once
 
@@ -16,7 +21,7 @@ class UMaterial;
 /**
  * An actor that captures rendered frames from the scene to disk or to memory.
  *
- * Place in a level (or attach programmatically) to record video frames,
+ * Attach to the replicated player pawn during demo playback to render frames
  * depth maps, semantic segmentation images, or surface normals during
  * demo playback. Configure the post-process mode, resolution, FOV, and
  * capture rate in the editor or at runtime.

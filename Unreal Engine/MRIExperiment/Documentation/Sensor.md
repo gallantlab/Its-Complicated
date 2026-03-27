@@ -2,6 +2,8 @@
 
 **Files:** `Sensor/MRIFrameCaptureCamera.h`, `Sensor/MRIFrameCaptureCamera.cpp`, `Sensor/MRIPostProcessEffect.h`
 
+**Attribution:** `AMRIFrameCaptureCamera` and `EMRIPostProcessEffect` were adapted from the [CARLA open-source autonomous driving simulator](https://github.com/carla-simulator/carla), version 0.8.4. Copyright (c) 2017 Computer Vision Center (CVC) at the Universitat Autonoma de Barcelona (UAB). Licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
 ## What It Does
 
 `AMRIFrameCaptureCamera` is an actor that wraps a `USceneCaptureComponent2D` and a `UTextureRenderTarget2D` to capture rendered frames and save them as PNG files to disk. It supports multiple post-process effects defined by the `EMRIPostProcessEffect` enum: SceneFinal (normal RGB), Depth, SemanticSegmentation, WorldNormal, and CameraNormal. The post-process materials are loaded by path in the constructor; projects should assign the correct material references for their setup.

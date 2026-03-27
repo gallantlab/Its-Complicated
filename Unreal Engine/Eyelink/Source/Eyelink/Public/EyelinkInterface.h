@@ -13,44 +13,41 @@ typedef unsigned char byte;
 
 // Delegate declarations
 
-/** Delegate invoked by Eyelink to set up the calibration display. Returns 0 on success. */
+/** Delegate for Eyelink to set up the calibration display. Returns 0 on success. */
 DECLARE_DELEGATE_RetVal(int, FSetupCalibrationDisplayDelegate);
-/** Delegate invoked by Eyelink when the calibration display should be torn down. */
+/** Delegate for Eyelink when the calibration display should be torn down. */
 DECLARE_DELEGATE(FExitCalibrationDisplayDelegate);
 
-/** Delegate invoked to initialize the camera image display with the given width and height. Returns 0 on success. */
+/** Delegate for initializing the camera image display with the given width and height. Returns 0 on success. */
 DECLARE_DELEGATE_RetVal_TwoParams(int, FInitCameraImageDisplayDelegate, int, int);
-/** Delegate invoked to update the camera image title string. */
+/** Delegate for updating the camera image title string. */
 DECLARE_DELEGATE_OneParam(FUpdateCameraImageTitleDelegate, FString);
-/** Delegate invoked to draw a single horizontal line of camera image data. Args: width, line index, total lines, pixel data. */
+/** Delegate for drawing a single horizontal line of camera image data. Args: width, line index, total lines, pixel data. */
 DECLARE_DELEGATE_FourParams(FDrawOneCameraImageLineDelegate, int, int, int, byte*);
-/** Delegate invoked when the camera image display should be exited. */
+/** Delegate for exiting the camera image display. */
 DECLARE_DELEGATE(FExitCameraImageDisplayDelegate);
 
-/** Delegate invoked to clear the entire calibration display. */
+/** Delegate for clearing the entire calibration display. */
 DECLARE_DELEGATE(FClearCalibrationDisplayDelegate);
-/** Delegate invoked to erase the current calibration target from the display. */
+/** Delegate for erasing the current calibration target from the display. */
 DECLARE_DELEGATE(FEraseCalibrationTargetDelegate);
-/** Delegate invoked to draw a calibration target at the given (x, y) screen coordinates. */
+/** Delegate for drawing a calibration target at the given (x, y) screen coordinates. */
 DECLARE_DELEGATE_TwoParams(FDrawCalibrationTargetDelegate, int, int);
-/** Delegate invoked to poll for user input during calibration. */
+/** Delegate for polling for user input during calibration. */
 DECLARE_DELEGATE(FGetInputDelegate);
 
 
 /**
- * Operating mode for the Eyelink interface.
- *
- * Controls whether the interface communicates with real hardware, simulates
- * eye data, or only initializes the C library without opening a connection.
+ * Operating modes for the Eyelink library.
  */
 UENUM(BlueprintType)
 enum class EEyelinkInterfaceMode : uint8
 {
-	/** Only initialize the Eyelink C library; do not open a device connection. */
+	/** Only initialize the Eyelink C library; do not open connection. */
 	InitializeLibraryOnly = 0,
-	/** Connect to a real Eyelink device over the network. */
+	/** Connect to a real Eyelink host over the network. */
 	Live = 1,
-	/** Run in simulation mode (no physical device required). */
+	/** Run in simulation mode (no connection to real Eyelink host). */
 	Simulate = 2,
 };
 
@@ -92,7 +89,7 @@ public:
 	 * alphanumeric characters or underscores, be at most 8 characters before
 	 * the extension, and end with ".edf".
 	 * @param name  The candidate filename to validate.
-	 * @return true if the filename is valid for use with the Eyelink device.
+	 * @return true if the filename is valid for use with the Eyelink host.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")
 	static bool ValidateEyelinkFileName(const FString name);
@@ -137,7 +134,7 @@ public:
 	 *
 	 * Configures the device address, screen resolution, and operating mode, then
 	 * attempts to establish a connection. On success the tracker is placed in
-	 * offline (non-realtime) mode and common data-recording filters are set.
+	 * offline (non-realtime) mode and sets what should be recorded (lifted from stimulus_presentation repo).
 	 * @param address     IP address of the Eyelink host computer. Uses the stored eyelinkIP if empty.
 	 * @param resolution  Display resolution in pixels. Uses the stored ScreenResolution if zero.
 	 * @param mode        Operating mode (Live or Simulate).
@@ -147,7 +144,7 @@ public:
 	bool OpenEyelinkConnection(const FString& address = FString(""), const FVector2D& resolution = FVector2D(0,0), EEyelinkInterfaceMode mode = EEyelinkInterfaceMode::Simulate);
 
 	/**
-	 * Closes the connection to the Eyelink device if one is currently open.
+	 * Closes the connection to the Eyelink host if one is currently open.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")
 	void CloseEyelinkConnection();
@@ -171,6 +168,7 @@ public:
 
 	/**
 	 * Closes the currently open EDF data file on the Eyelink host computer.
+	 * Eyelink will close the current file regardless of the name here.
 	 * @param fileName  Name of the EDF file to close (for logging/verification purposes).
 	 * @return true if the file was closed successfully.
 	 */
@@ -196,21 +194,21 @@ public:
 	// === Wrapper methods for starting and stopping data collection ===
 
 	/**
-	 * Starts eyetracking data recording on the Eyelink device.
+	 * Starts eyetracking data recording on the Eyelink host.
 	 * Does nothing if the device is not connected.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")
 	void StartEyetrackingRecording();
 
 	/**
-	 * Stops eyetracking data recording on the Eyelink device.
+	 * Stops eyetracking data recording on the Eyelink host.
 	 * Does nothing if the device is not connected.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")
 	void StopEyetrackingRecording();
 
 	/**
-	 * Returns whether the Eyelink device is currently recording eye data.
+	 * Returns whether the Eyelink host is currently recording eye data.
 	 * @return true if recording is active.
 	 */
 	UFUNCTION(BlueprintPure, Category = "Eyelink")
@@ -219,28 +217,28 @@ public:
 	// === Eyelink interaction commands ===
 
 	/**
-	 * Accepts the current fixation trigger on the Eyelink device.
+	 * Tells the host to accept the current fixation for the current calibration point.
 	 * @return The Eyelink library return value; -1 if not connected.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")
 	int AcceptFixation();
 
 	/**
-	 * Sends the Eyelink terminate key (special ESC key code) to end a trial.
+	 * Sends the Eyelink "terminate" key to end a trial.
 	 * @return The Eyelink library return value; -1 if not connected.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")
 	int SendTerminateKey();
 
 	/**
-	 * Sends the Eyelink break key (special CTRL-C key code) to abort processing.
+	 * Sends the Eyelink "break" key to abort processing.
 	 * @return The Eyelink library return value; -1 if not connected.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")
 	int SendBreakKey();
 
 	/**
-	 * Sends an arbitrary keycode to the Eyelink device as a key-press event.
+	 * Sends an arbitrary keycode to the Eyelink host as a key-press event.
 	 * @param keycode  The integer keycode to send.
 	 * @return The Eyelink library return value; 0 if not connected.
 	 */
@@ -248,7 +246,7 @@ public:
 	int SendKey(int keycode);
 
 	/**
-	 * Launches the Eyelink camera setup and calibration routine on a background thread.
+	 * Start the Eyelink camera setup and calibration routine.
 	 * Does nothing if the device is not connected.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")
@@ -273,14 +271,14 @@ public:
 	void SetEyelinkResolution(const FVector2D & resolution);
 
 	/**
-	 * Sends a command to clear the Eyelink operator's display.
+	 * Sends a command to clear the Eyelink host's display.
 	 * Does nothing if the device is not connected.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")
 	void ClearEyetrackingComputerDisplay();
 
 	/**
-	 * Sets the status text shown on the Eyelink operator's display.
+	 * Sets the status text shown on the Eyelink host's display.
 	 * @param message  The message string to display on the Eyelink host.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")
@@ -312,14 +310,14 @@ public:
 	void SendEyelinkMessage(const FString message) const;
 
 	/**
-	 * Retrieves the most recent response string from the Eyelink device.
+	 * Retrieves the most recent response string from the Eyelink host.
 	 * @return The response string, or an empty string if not connected.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Eyelink")
 	FString GetEyelinkResponse() const;
 
 	/**
-	 * Returns whether the Eyelink device is currently connected.
+	 * Returns whether the Eyelink host is currently connected.
 	 * @return true if an active connection exists.
 	 */
 	UFUNCTION(BlueprintPure, Category = "Eyelink")
@@ -333,7 +331,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Eyelink")
 	EEyelinkInterfaceMode InterfaceMode = EEyelinkInterfaceMode::InitializeLibraryOnly;
 
-	/** Screen resolution reported to the Eyelink device for gaze coordinate mapping. */
+	/** Screen resolution reported to the Eyelink host for gaze coordinate mapping. */
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Eyelink")
 	FVector2D ScreenResolution = FVector2D();
 

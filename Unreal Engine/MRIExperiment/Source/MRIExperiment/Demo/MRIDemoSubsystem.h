@@ -1,6 +1,9 @@
 // Copyright (c) Gallant Lab. All Rights Reserved.
-// Demo/replay management subsystem extracted from UCarlaGameInstance.
-// Lives on any UGameInstance so projects do not need to replace their own.
+//
+// The demo recording and playback logic in this file was implemented with reference to the
+// Unreal Engine community replay system tutorial:
+// https://unrealcommunity.wiki/replay-system-tutorial-41kq5b58
+// The replay rendering pipeline and spectator controller are original work.
 
 #pragma once
 
@@ -76,9 +79,9 @@ struct FS_ReplayInfo
 /**
  * Game instance subsystem that manages demo recording, playback, and replay enumeration.
  *
- * Adapted from UCarlaGameInstance so that any project can use this functionality
+ * Adapted from the driving simulator so that any project can use this functionality
  * without replacing its own game instance class. Attach to any UGameInstance by
- * simply including the plugin. Provides Blueprint-callable wrappers for all
+ * including the plugin. Provides Blueprint-callable wrappers for all
  * core replay operations, a demo-rendering pipeline for offline frame capture,
  * and OBS integration stubs.
  */
@@ -175,20 +178,20 @@ public:
 	// ------------------------------------------------------------------
 
 	/**
-	 * Begins playback of the replay with the given name.
+	 * Plays the demo with the given name.
 	 * @param replayName  Internal filename of the replay to play.
 	 */
 	void PlayReplay(const FString& replayName);
 
 	/**
-	 * Begins recording a new replay.
+	 * Begins recording a new demo.
 	 * @param name          Internal filename to use for the recording.
 	 * @param friendlyName  Human-readable name shown in UI.
 	 */
 	void StartRecordingReplay(const FString& name, const FString& friendlyName);
 
 	/**
-	 * Stops the currently active replay recording.
+	 * Stops the currently active demo recording.
 	 */
 	void StopRecordingReplay();
 
@@ -197,7 +200,7 @@ public:
 	// ------------------------------------------------------------------
 
 	/**
-	 * Blueprint-callable wrapper to begin recording a replay.
+	 * Blueprint-callable wrapper to begin recording a demo.
 	 * @param ReplayName    Internal filename for the new recording.
 	 * @param FriendlyName  Human-readable name shown in UI.
 	 */
@@ -205,20 +208,20 @@ public:
 	void StartRecordingReplayFromBP(FString ReplayName, FString FriendlyName);
 
 	/**
-	 * Blueprint-callable wrapper to stop the currently active replay recording.
+	 * Blueprint-callable wrapper to stop the currently active demo recording.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Replays")
 	void StopRecordingReplayFromBP();
 
 	/**
-	 * Blueprint-callable wrapper to begin playing back a replay.
-	 * @param ReplayName  Internal filename of the replay to play back.
+	 * Blueprint-callable wrapper to begin playing back a demo.
+	 * @param ReplayName  Internal filename of the demo to play back.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Replays")
 	void PlayReplayFromBP(FString ReplayName);
 
 	/**
-	 * Asynchronously enumerates all available replay files.
+	 * Asynchronously enumerates all available demo files.
 	 * When complete, calls BP_OnFindReplaysComplete with the results.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Replays")
@@ -262,7 +265,7 @@ public:
 	}
 
 	/**
-	 * Returns a pointer to the folder path where captured frames are saved.
+	 * Returns folder path where captured frames are saved.
 	 * @return Pointer to the capture folder string, or nullptr if not set.
 	 */
 	FString* GetCaptureFolder() const
@@ -271,7 +274,7 @@ public:
 	}
 
 	/**
-	 * Returns a pointer to the filename of the demo currently being rendered.
+	 * Returns the filename of the demo currently being rendered.
 	 * @return Pointer to the demo filename string, or nullptr if not set.
 	 */
 	FString* GetDemoName() const
@@ -318,7 +321,8 @@ public:
 	const TArray<FString>& GetDemosList();
 
 	/**
-	 * Returns a parallel bool array indicating which demos have already been rendered.
+	 * Returns a bool array indicating which demos have already been rendered.
+	 * Array has same order as GetDemosList().
 	 * @return Const reference to the isDemoRendered array.
 	 */
 	UFUNCTION(BlueprintPure, Category = "Replays")
@@ -336,8 +340,8 @@ public:
 	FString replayToRender;
 
 	/**
-	 * Returns whether automatic rendering of all replays is enabled.
-	 * @return true if auto-rendering is configured.
+	 * Whether we should automatically render all demos.
+	 * @return true if we should.
 	 */
 	bool IsAutoRender() const
 	{
@@ -359,7 +363,7 @@ public:
 
 	/**
 	 * Requests OBS to start or stop recording.
-	 * Currently a stub; implementation is pending.
+	 * Currently a stub; BYO websockets client for OBS control. I used easywsclient
 	 * @param startStop  true to start recording, false to stop.
 	 * @return Status code from the OBS integration (currently unimplemented).
 	 */
@@ -371,7 +375,7 @@ private:
 	UPROPERTY()
 	UMRISettings* settings;
 
-	/** Experiment type derived from settings. */
+	/** Experiment type read from settings. */
 	EExperimentType experimentType;
 
 	/** True if a replay is currently being played back. */
@@ -383,11 +387,14 @@ private:
 
 	/** If true, the spectator controller should capture frames to disk during playback. */
 	bool spectatorToCaptureFrames = false;
-	/** Path to the folder where captured frames are saved. Heap-allocated; owned by this object. */
+	/** Path to the folder where captured frames are saved.*/
 	FString* captureFolder = nullptr;
-	/** Filename of the demo currently being rendered. Heap-allocated; owned by this object. */
+	/** Filename of the demo currently being rendered. */
 	FString* demoFileName = nullptr;
-	/** Target frame rate for the current frame capture operation. */
+	/** 
+	 * Frame rate for rendering. The game engine tick will be fixed to match this and be
+	 * decoupled from wall time.
+	 */
 	int captureFPS = 0;
 
 	/** Network replay streamer used for enumerating available replays. */
@@ -414,15 +421,15 @@ private:
 	/** Cached name used for name-based player pawn lookup. */
 	FName* playerPawnName = nullptr;
 
-	/** Complete list of demo filenames enumerated from disk. */
+	/** Complete list of demo filenames we have on disk. */
 	TArray<FString> allDemos;
-	/** Parallel bool array indicating which demos have been rendered. */
+	/** Array indicating which demos have been rendered. */
 	TArray<bool> isDemoRendered;
 	/** True if the display resolution has already been applied this session. */
 	bool bIsResolutionSet = false;
-	/** True if the demos list needs to be re-enumerated from disk. */
+	/** True if the demos list needs to be refreshed */
 	bool bIsDemosListStale = true;
-	/** True if automatic rendering of all replays has been requested. */
+	/** True if we should auto render all demos */
 	bool bIsAutoRender = false;
 
 protected:

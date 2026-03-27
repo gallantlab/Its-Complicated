@@ -18,12 +18,16 @@ The PlayerController handles UX and also TTLs, since that comes in on a HID obje
 
 **Logging** (`MRIExperimentState`, `UMRILoggerComponent`): The experiment state class captures a snapshot of relevant experiment state for a single frame, from all entities and the subject's controls/TTL state. It then write it to a human-readable XML. The logger component is an actor component on the spectator controller that creates these snapshots each frame. Inherit from both to add experiment-specific data.
 
-**Sensor** (`AMRIFrameCaptureCamera`): A scene capture camera actor that renders frames to PNG files on disk. It wraps a `USceneCaptureComponent2D` with a render target, supports configurable post-process effects (depth, semantic segmentation, normals), and provides auto-incrementing filename saves. The spectator controller calls `SaveNextFrame()` on each sensor every tick during replay rendering. 
-These are extended from the original CARLA implementations as of 0.8.4 - see CARLA for more information.
+**Sensor** (`AMRIFrameCaptureCamera`): A scene capture camera actor that renders frames to PNG files on disk. It wraps a `USceneCaptureComponent2D` with a render target, supports configurable post-process effects (depth, semantic segmentation, normals), and provides auto-incrementing filename saves. The spectator controller calls `SaveNextFrame()` on each sensor every tick during replay rendering. Adapted from CARLA 0.8.4 (see Credits).
 
-**Settings** (`UMRISettings`): Configuration management for the experiment. Reads and writes INI-format config files with settings for the experiment type, subject ID, auto-trigger/auto-stop behavior, eyetracking calibration, display resolution, TTLs before experiment start, and semantic segmentation. The settings object is created and owned by the Demo Subsystem.
+**Settings** (`UMRISettings`): Configuration management for the experiment. Reads and writes INI-format config files with settings for the experiment type, subject ID, auto-trigger/auto-stop behavior, eyetracking calibration, display resolution, TTLs before experiment start, and semantic segmentation. The settings object is created and owned by the Demo Subsystem. Adapted from CARLA 0.8.4 (see Credits).
 
-**Agent** (`UMRIAgentComponent` and subclasses): A visitor-pattern entity typing system. Actors in the world that should be tracked during replay should have an agent component attached. During state logging, the experiment state visits each agent component to record its state information at each tick. An agent component needs to be added for each entity type you deal with in your experiment.
+**Agent** (`UMRIAgentComponent` and subclasses): A visitor-pattern entity typing system. Actors in the world that should be tracked during replay should have an agent component attached. During state logging, the experiment state visits each agent component to record its state information at each tick. An agent component needs to be added for each entity type you deal with in your experiment. Adapted from CARLA 0.8.4 (see Credits).
 
-### Credits
-Some of these systems (the agent component pattern, the camera sensors, and the settings system) were adapted from CARLA. the demo replay was implemented following a UE tutorial.
+## Credits and Acknowledgements
+
+The agent component / visitor pattern (`UMRIAgentComponent`, `IMRIAgentComponentVisitor`), the frame capture camera sensors (`AMRIFrameCaptureCamera`, `EMRIPostProcessEffect`), and the settings system (`UMRISettings`) were adapted from the [CARLA open-source autonomous driving simulator](https://github.com/carla-simulator/carla), version 0.8.4.
+
+Copyright (c) 2017 Computer Vision Center (CVC) at the Universitat Autonoma de Barcelona (UAB). Licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+The demo recording and playback logic was implemented with reference to the [Unreal Engine community replay system tutorial](https://unrealcommunity.wiki/replay-system-tutorial-41kq5b58). 

@@ -40,18 +40,18 @@ public:
 	void EyelinkValidate();
 
 	/**
-	 * Sends a raw command string to the Eyelink device and returns its response.
+	 * Sends a raw command string to the Eyelink host and returns its response.
 	 * Logs both the command and the response via LogEyelink.
-	 * @param command  The Eyelink command string to transmit.
-	 * @return The response string from the Eyelink device, or an error description if unavailable.
+	 * @param command  The Eyelink command to send.
+	 * @return The response string from the Eyelink host, or an error description if unavailable.
 	 */
 	UFUNCTION(Exec, Category = ExecFunctions, BlueprintCallable)
 	FString EyelinkSendCommand(FString command);
 
 	/**
-	 * Sends a raw keycode to the Eyelink device.
+	 * Sends a raw keycode to the Eyelink host.
 	 * Useful for simulating key presses on the Eyelink host computer.
-	 * @param keycode  The integer keycode to send to the Eyelink device.
+	 * @param keycode  The keycode to send to the Eyelink host.
 	 */
 	UFUNCTION(Exec, Category = ExecFunctions, BlueprintCallable)
 	void EyelinkSendKey(int keycode);

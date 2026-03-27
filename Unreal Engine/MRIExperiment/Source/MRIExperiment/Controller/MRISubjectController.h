@@ -13,7 +13,7 @@ class UMRIDemoSubsystem;
 class UMRISettings;
 class USoundCue;
 
-/** Empty string constant used as a default/sentinel value for display text operations. */
+/** Empty string constant used as a default value for display text */
 const FString EMPTY_STRING = FString("");
 
 /**
@@ -54,8 +54,7 @@ class MRIEXPERIMENT_API AMRISubjectController : public APlayerController
 public:
 
 	/**
-	 * Constructs the controller, initializes the random stream, enables ticking,
-	 * and loads the 440 Hz synchronization beep sound cue.
+	 * Constructor
 	 * @param ObjectInitializer  Unreal object initializer forwarded to the parent class.
 	 */
 	AMRISubjectController(const FObjectInitializer& ObjectInitializer);
@@ -76,7 +75,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	/**
-	 * Called when this controller possesses a pawn. Caches a typed reference to
+	 * Called when this controller pstarts to possess a pawn. Caches a typed reference to
 	 * the AMRISubjectState and configures the net update frequency for replication.
 	 * @param pawn  The pawn being possessed.
 	 */
@@ -84,7 +83,9 @@ public:
 
 	/**
 	 * Marks eyetracking as ended (state 2). Call this from Blueprint when the
-	 * eyetracking calibration session has completed.
+	 * eyetracking calibration sequence has completed.
+	 * This is code left from when we implemented a native eyetracking calibration sequence.
+	 * Not used if you are using Eyelink and/or the GameMonitor.
 	 */
 	UFUNCTION(BlueprintCallable)
 	void SetEyetrackingEnded()
@@ -93,14 +94,15 @@ public:
 	}
 
 	/**
-	 * Returns true if the demo recording has just ended on this tick (transition from
-	 * recording to stopped). Resets experiment state when this occurs.
+	 * Returns true if the demo recording has finihed but a new one has not yet started.
+	 * Useful for end-of-run stuff
 	 * @return true on the first tick after demo recording stops.
 	 */
 	bool IsDemoEnded();
 
 	/**
-	 * Pure virtual override point for per-frame experiment logic.
+	 * Pure virtual override point for experiment logic. The core time-based/sequential experiment
+	 * logic should be implemented her eby the subclasses.
 	 * Called each tick once the required number of TTL pulses have been received.
 	 * Subclasses must implement this to drive their experiment state machine.
 	 * @param deltaTime  Time elapsed since the last frame in seconds.
@@ -108,21 +110,19 @@ public:
 	virtual void ExperimentTick(float deltaTime) = 0;
 
 	/**
-	 * Called on the falling edge of a TTL pulse (MRI scanner trigger pressed).
-	 * Records the TTL in subject state, increments the TTL counter, optionally
+	 * Called on the on the TTL keydown event.
+	 * Sets the TTL flag in subject state, increments the TTL counter, optionally
 	 * auto-starts demo recording on the first TTL, and resets the no-TTL timer.
 	 */
 	virtual void TTLdown();
 
 	/**
-	 * Called on the rising edge of a TTL pulse (MRI scanner trigger released).
-	 * Clears the TTL flag in subject state, optionally triggers eyetracking
-	 * calibration, and decrements the pre-experiment TTL countdown.
+	 * Called on the on the TTL keyup event. Unsets the TTL flag in subject state.
 	 */
 	virtual void TTLup();
 
 	/**
-	 * Returns whether a TTL pulse is currently active (i.e. the scanner trigger is held).
+	 * Returns whether the TTL key is currently down.
 	 * @return true if the TTL flag is set in the subject state.
 	 */
 	bool isTTL() const;
@@ -145,7 +145,7 @@ protected:
 	double displayTextTimeRemaining = 0;
 
 	/**
-	 * Adds the given increment to the subject's point total and fires SetDisplayPointsDelegate.
+	 * Increment the total number of points
 	 * @param increment  Amount to add to the running points total (default: 1).
 	 */
 	virtual void UpdatePoints(int increment = 1);
@@ -163,7 +163,7 @@ protected:
 						EDisplayTextColor color = EDisplayTextColor::White);
 
 	/**
-	 * Overload of SetDisplayText with the prompt type before the duration parameter.
+	 * Overload to let you put in different things without specifying all the parameters.
 	 * Delegates to the primary overload.
 	 * @param text                   Text string to display on screen.
 	 * @param displayedPromptType    Semantic type of the prompt (for logging purposes).
@@ -194,25 +194,25 @@ protected:
 	virtual void ResetExperimentState();
 
 	/**
-	 * Binds TTL and beep input actions to the corresponding handler methods.
+	 * Binds TTL and all input actions to the corresponding handler methods.
 	 */
 	virtual void SetupInputComponent() override;
 
 	/**
 	 * Plays the 440 Hz synchronization beep sound and records the beep event in
-	 * subject state. Also triggers a TTLdown event for combined ephys/fMRI experiments.
+	 * subject state. Also triggers a TTLdown to easy parsing of the log.
 	 */
 	void PlayBeep();
 
 	/**
 	 * Records the timestamp (in seconds since demo start) at which the first TTL
 	 * of this run was received.
-	 * @param seconds  Elapsed seconds from demo start to the first TTL pulse.
+	 * @param seconds  Elapsed seconds from demo start to the first TTL.
 	 */
 	UFUNCTION(BlueprintCallable)
 	void SetSecondsToStartOfRun(float seconds);
 
-	/** True if no TTL pulse has been received yet for the current run. */
+	/** True if no TTL has been received yet for the current run. */
 	bool isFirstTTLInRun = true;
 
 	/** Timer handle for clearing the beep flag in subject state after playback ends. */
@@ -233,7 +233,7 @@ protected:
 	/** Seconds elapsed since the demo recording started for this run. */
 	double timeSinceDemoStart = 0.0;
 
-	/** Seconds elapsed between demo start and the first TTL pulse of the run. */
+	/** Seconds elapsed between demo start and the first TTL of the run. */
 	double secondsToFirstTTL = 0.0;
 
 	/**
@@ -252,12 +252,18 @@ protected:
 	 */
 	UMRIDemoSubsystem* GetDemoSubsystem();
 
-	/** If true, eyetracking calibration is triggered automatically at the start of each run. */
+	/** If true, eyetracking calibration is triggered automatically at the start of each run. 
+	 * This is  left from when we implemented a native eyetracking calibration sequence.
+	 * Not used if you are using Eyelink and/or the GameMonitor.
+	 */
 	bool autoEyetrack = false;
-	/** Current eyetracking calibration state: 0 = not started, 1 = started, 2 = ended. */
+	/** Current eyetracking calibration state: 0 = not started, 1 = started, 2 = ended. 
+	 * This is left from when we implemented a native eyetracking calibration sequence.
+	 * Not used if you are using Eyelink and/or the GameMonitor.
+	 */
 	int eyetrackingState = 0;
 
-	/** Random stream for experiment-level randomization. */
+	/** Random number generator for experiment-level randomization. */
 	FRandomStream randomStream;
 
 	/** Pointer to the subject's replicated player state. Set during Possess. */
@@ -277,16 +283,16 @@ private:
 	 */
 	void UpdateDemoState();
 
-	/** Number of TTL pulses still required before experiment logic begins. */
+	/** Number of TTLs required before experiment logic begins. */
 	int TTLsToExperimentStart = 5;
 
-	/** If true, demo recording starts automatically on the first TTL pulse of a run. */
+	/** If true, demo recording starts automatically on the first TTL of a run. */
 	bool autoTriggerDemo = false;
 	/** If true, demo recording stops automatically after secondsWithoutTTL exceeds autoStopDemoLimit. */
 	bool bAutoStopDemo = false;
 	/** Threshold in seconds without a TTL before auto-stopping demo recording. */
 	float autoStopDemoLimit = 0;
-	/** Seconds elapsed since the last TTL pulse was received. */
+	/** Seconds elapsed since the last TTL was received. */
 	float secondsWithoutTTL = 0.0;
 
 	// Used for auto render all; wait n seconds into game init before render

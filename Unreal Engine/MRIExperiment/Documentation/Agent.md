@@ -1,6 +1,8 @@
 # Agent Module
 
-**Files:** `Agent/MRIAgentComponent.h`, `Agent/MRIAgentComponent.cpp`, `Agent/MRIAgentComponentVisitor.h`, 
+**Files:** `Agent/MRIAgentComponent.h`, `Agent/MRIAgentComponent.cpp`, `Agent/MRIAgentComponentVisitor.h`
+
+**Attribution:** The agent component and visitor pattern in this module were adapted from the [CARLA open-source autonomous driving simulator](https://github.com/carla-simulator/carla) (version 0.8.4). Copyright (c) 2017 Computer Vision Center (CVC) at the Universitat Autonoma de Barcelona (UAB). Licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
 ## What It Does
 

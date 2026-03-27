@@ -17,8 +17,8 @@ class AMRISubjectState;
 /**
  * Player controller used during demo playback to follow the subject and capture data.
  *
- * During replay, a spectator controller is spawned to track the replaying subject pawn,
- * drive attached sensor cameras, log per-frame experiment state, and (optionally) save
+ * During replay, a spectator controller is spawned to track the subject pawn,
+ * attach sensor cameras, log per-frame experiment state, and save
  * rendered frames to disk. Subclass this controller to add experiment-specific logging.
  */
 UCLASS()
@@ -29,23 +29,22 @@ class MRIEXPERIMENT_API AMRISpectatorController : public APlayerController
 public:
 
 	/**
-	 * Constructs the controller and initializes member pointers to safe defaults.
+	 * Constructor.
 	 * @param objectInitializer  Unreal object initializer forwarded to the parent class.
 	 */
 	AMRISpectatorController(const FObjectInitializer& objectInitializer);
 
-	/** Destructor. Cleans up heap-allocated frame state and sensor arrays. */
+	/** Destructor. */
 	~AMRISpectatorController();
 
 	/**
-	 * Called every frame. Advances the replay time step, captures sensors, logs
-	 * experiment state, and saves frames to disk if frame capture is enabled.
+	 * All the framewise logic
 	 * @param deltaTime  Time elapsed since the last frame in seconds.
 	 */
 	virtual void Tick(float deltaTime) override;
 
 	/**
-	 * Sets the reference pawn whose state is tracked throughout the replay.
+	 * Sets the reference pawn to follow, i.e. the player's pawn.
 	 * @param referencePawn  The pawn to follow and record data from.
 	 */
 	void SetReferencePawn(APawn* referencePawn);
@@ -63,17 +62,17 @@ public:
 	virtual void BeginPlayingState() override;
 
 	/**
-	 * Searches the world for an actor tagged with MRIPlayerTag and returns it as an APawn.
+	 * Search for the subject pawn in all the actors in the world.
 	 * @return Pointer to the tagged player pawn, or nullptr if not found.
 	 */
 	APawn* FindTaggedPlayerPawn();
 
 	/**
-	 * Triggers all attached sensor cameras to capture and (optionally) save the current frame.
+	 * Save sensor outputs from the current frame.
 	 */
 	void CaptureSensors();
 
-	/** If true, each rendered frame is saved to disk in the configured capture folder. */
+	/** Are we writing frames from sensors to disk? */
 	bool captureFrames;
 
 	/**
@@ -84,24 +83,24 @@ public:
 
 	/**
 	 * Writes all accumulated per-frame experiment state to a log file on disk.
-	 * Override to customise the output format or destination.
+	 * Override to add custom experiment info.
 	 */
 	virtual void SaveExperimentLog();
 
 	/**
-	 * Returns whether the replay has finished and this controller should be cleaned up.
+	 * Returns whether the replay has finished and this instance should be cleaned up..
 	 * @return true if the replay has ended.
 	 */
 	bool IsStale() { return stopDemo; }
 
 	/**
-	 * Appends a new per-frame experiment state snapshot to the internal log buffer.
+	 * Appends a the current state of the experiment from this current tick to log.
 	 * @param newState  Heap-allocated state object. Ownership is transferred to this controller.
 	 */
 	void AddExperimentState(MRIExperimentState* newState);
 
 	/**
-	 * Returns the replicated player state of the reference subject pawn.
+	 * Get the current state at this tick of the replicated player pawn.
 	 * @return Pointer to the AMRISubjectState, or nullptr if not yet resolved.
 	 */
 	AMRISubjectState* GetReferencePlayerState() const
@@ -140,18 +139,17 @@ protected:
 
 	/**
 	 * Attempts to set the view target to the replaying subject pawn.
-	 * Called repeatedly until the pawn is found and the view is locked.
 	 */
 	void TrySetViewTargetToPlayer();
 
 	/**
-	 * Enables or disables fixed time-stepping for deterministic replay playback.
-	 * @param fix  true to lock the time step, false to restore normal simulation time.
+	 * Enables or disables fixed time-stepping. When fixed, game time is decoupled from wall time.
+	 * @param fix  true to lock the time step.
 	 */
 	void FixTimeStep(bool fix);
 
 	/**
-	 * Captures the current per-frame state from all registered agents and the subject state,
+	 * Captures the state from all registered agents on this current tick,
 	 * then appends the snapshot to the internal log buffer.
 	 */
 	void LogExperimentState();

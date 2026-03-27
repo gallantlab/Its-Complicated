@@ -28,8 +28,8 @@ public:
 
 	/**
 	 * Called when the game instance is shutting down.
-	 * Safely stops any active eye-tracking recording, closes the data file,
-	 * and disconnects from the Eyelink device before calling the parent shutdown.
+	 * Stops any active eyetracking recording, closes the data file,
+	 * and disconnects from the Eyelink host before shutdown.
 	 */
 	virtual void Shutdown() override;
 	
@@ -38,8 +38,7 @@ public:
 	//============================================
 public:
 	/**
-	 * The Eyelink interface object that wraps the Eyelink C API.
-	 * Accessible from Blueprints as a read-only reference.
+	 * Singleton Eyelink interface object that wraps the Eyelink C API.
 	 */
 	UPROPERTY(Category = "Eyelink", BlueprintReadOnly)
 	UEyelinkInterface* Eyelink;

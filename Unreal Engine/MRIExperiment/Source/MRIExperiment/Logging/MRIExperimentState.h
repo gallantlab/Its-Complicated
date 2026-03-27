@@ -22,7 +22,7 @@
 
 
 /**
- * Snapshot of the position, rotation, type, and ID of a single agent entity at one frame.
+ * Tick/frame record of the position, rotation, type, and ID of a single agent entity at one frame.
  *
  * Used as a record inside MRIExperimentState to track all relevant actors during replay.
  */
@@ -109,13 +109,13 @@ public:
 	double GetFrameTime() const { return time; }
 
 	/**
-	 * Returns the zero-based replay frame index for this snapshot.
+	 * Returns the rendered frame index for this snapshot.
 	 * @return Frame number.
 	 */
 	int GetFrame() const { return frame; }
 
 	/**
-	 * Returns the total number of TTL pulses recorded up to this frame.
+	 * Returns the total number of TTLs recorded at the time of this frame.
 	 * @return Cumulative TTL count.
 	 */
 	int TotalTTLCount() const { return totalTTLs; }
@@ -162,13 +162,13 @@ public:
 	bool isTTL;
 
 	/**
-	 * Serializes this frame's state to the given file stream as XML-style log output.
+	 * Writes the state at this frame out to XML at the given file stream.
 	 * @param logFile      Output file stream to write to.
 	 * @param indentation  Current indentation level (modified in place).
 	 */
 	void WriteToFile(std::ofstream& logFile, int& indentation);
 
-	/** Destructor. Frees any resources held by the state. */
+	/** Destructor. */
 	~MRIExperimentState();
 
 protected:
@@ -185,14 +185,14 @@ private:
 
 	/** Simulation time in seconds at which this frame was captured. */
 	double time;
-	/** Zero-based replay frame index. */
+	/** Zero-based replay rendering frame index. */
 	int frame;
 	/** Entity type of the primary tracked actor for this frame. */
 	EntityType thisType;
 	/** Per-agent position/rotation/type snapshots for this frame. */
 	TArray<EntityState> entityStates;
 
-	/** Total TTL pulses received up to this frame. */
+	/** Total TTLs received up to this frame. */
 	int totalTTLs = 0;
 	/** True if a synchronization beep was active during this frame. */
 	bool isBeep;

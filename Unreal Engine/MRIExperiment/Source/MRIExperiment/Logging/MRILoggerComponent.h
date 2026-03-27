@@ -13,7 +13,7 @@ class AMRISpectatorController;
  * Base actor component that collects per-frame experiment state during demo playback.
  *
  * Attach this component (or a subclass) to the spectator controller. The spectator
- * calls LogFrame() each tick to snapshot the current state of all registered agents
+ * calls LogFrame() each tick to record the current state of all registered agents
  * and the subject's player state into the experiment log buffer.
  *
  * Subclass this component to add experiment-specific data to each log frame.

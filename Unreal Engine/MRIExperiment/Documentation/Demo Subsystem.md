@@ -2,6 +2,8 @@
 
 **Files:** `Demo/MRIDemoSubsystem.h`, `Demo/MRIDemoSubsystem.cpp`
 
+**Reference:** The demo recording and playback logic was implemented with reference to the [Unreal Engine community replay system tutorial](https://unrealcommunity.wiki/replay-system-tutorial-41kq5b58). 
+
 ## What It Does
 
 `UMRIDemoSubsystem` is a `UGameInstanceSubsystem` that manages demo recording, playback, and replay rendering. Because it is a subsystem, it gets automatically created alongside the game instance and persists across level loads, but does not require you to replace the default game instance class.

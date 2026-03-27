@@ -2,6 +2,8 @@
 
 **Files:** `Settings/MRISettings.h`, `Settings/MRISettings.cpp`
 
+**Attribution:** The settings loading/saving pattern in this module was adapted from the [CARLA open-source autonomous driving simulator](https://github.com/carla-simulator/carla). Copyright (c) 2017 Computer Vision Center (CVC) at the Universitat Autonoma de Barcelona (UAB). Licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
 ## What It Does
 
 `UMRISettings` is a `UObject` that manages experiment configuration through INI-format files. It reads settings from the default game config file or from a file path specified on the command line (via `-carla-settings=`), and can write settings back out. The demo subsystem creates and owns the settings object on initialization.

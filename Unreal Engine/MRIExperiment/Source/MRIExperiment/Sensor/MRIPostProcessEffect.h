@@ -1,4 +1,9 @@
-// MRI Experiment Plugin - Post Process Effect Enum
+// Copyright (c) Gallant Lab. All Rights Reserved.
+//
+// Portions of this file are adapted from the CARLA open-source autonomous driving simulator,
+// version 0.8.4 (https://github.com/carla-simulator/carla).
+// Copyright (c) 2017 Computer Vision Center (CVC) at the Universitat Autonoma de Barcelona (UAB).
+// Licensed under the MIT License (https://opensource.org/licenses/MIT).
 
 #pragma once
 
@@ -26,8 +31,8 @@ enum class EMRIPostProcessEffect : uint8
 	/** Capture per-pixel surface normals in camera space. */
 	CameraNormal          UMETA(DisplayName = "Camera Normals"),
 
-	/** Sentinel value representing the total number of valid enum entries. */
+	/** Total number of valid enum entries. */
 	SIZE                  UMETA(Hidden),
-	/** Sentinel value used to indicate an uninitialized or invalid mode. */
+	/** Invalid mode. */
 	INVALID               UMETA(Hidden),
 };
