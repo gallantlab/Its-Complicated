@@ -14,6 +14,10 @@
 #define BOOL_TO_TEXT(x) x ? TEXT("yes") : TEXT("no")
 
 
+/**
+ * Constructs the controller, initializes the random stream, enables ticking,
+ * and locates the 440 Hz synchronization beep sound cue asset.
+ */
 AMRISubjectController::AMRISubjectController(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
@@ -27,6 +31,11 @@ AMRISubjectController::AMRISubjectController(const FObjectInitializer& ObjectIni
 }
 
 
+/**
+ * Reads settings from MRISettings, configures auto-eyetracking, auto-demo-recording,
+ * auto-stop thresholds, and applies the display resolution if not yet applied.
+ * Also triggers auto-rendering of all replays if RenderAll is set.
+ */
 void AMRISubjectController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -68,6 +77,10 @@ void AMRISubjectController::BeginPlay()
 }
 
 
+/**
+ * Caches a typed pointer to AMRISubjectState from PlayerState and configures
+ * the net update frequency for reliable replication.
+ */
 void AMRISubjectController::Possess(APawn* pawn)
 {
 	Super::Possess(pawn);
@@ -78,6 +91,10 @@ void AMRISubjectController::Possess(APawn* pawn)
 }
 
 
+/**
+ * Attempts to find UMRIDemoSubsystem on the current game instance.
+ * @return true if the subsystem was found and cached.
+ */
 bool AMRISubjectController::FindDemoSubsystem()
 {
 	UE_LOG(LogMRI, Log, TEXT("Trying to find demo subsystem"));
@@ -93,6 +110,10 @@ bool AMRISubjectController::FindDemoSubsystem()
 }
 
 
+/**
+ * Per-frame update: refreshes demo state, runs ExperimentTick after enough TTLs,
+ * decrements the display text countdown, and auto-stops the demo if idle too long.
+ */
 void AMRISubjectController::Tick(float dTime)
 {
 	Super::Tick(dTime);
@@ -127,6 +148,9 @@ void AMRISubjectController::Tick(float dTime)
 }
 
 
+/**
+ * Binds TTL press/release and beep press/release actions from the input component.
+ */
 void AMRISubjectController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -143,6 +167,11 @@ void AMRISubjectController::SetupInputComponent()
 }
 
 
+/**
+ * Handles the falling edge of a TTL pulse. Records the TTL in subject state,
+ * increments the counter, resets the no-TTL timer, and on the first TTL of
+ * a run may auto-start demo recording and record the time since demo start.
+ */
 void AMRISubjectController::TTLdown()
 {
 	UE_LOG(LogMRI, Log, TEXT("TTL on %s"), *FDateTime::Now().ToString());
@@ -183,6 +212,10 @@ void AMRISubjectController::TTLdown()
 }
 
 
+/**
+ * Handles the rising edge of a TTL pulse. Clears the TTL flag in subject state,
+ * optionally triggers eyetracking calibration, and decrements TTLsToExperimentStart.
+ */
 void AMRISubjectController::TTLup()
 {
 	UE_LOG(LogMRI, Log, TEXT("TTL off %s"), *FDateTime::Now().ToString());
@@ -204,12 +237,18 @@ void AMRISubjectController::TTLup()
 }
 
 
+/** Returns whether the TTL pulse is currently active by querying subject state. */
 bool AMRISubjectController::isTTL() const
 {
 	return subjectState->isTTL();
 }
 
 
+/**
+ * Plays the 440 Hz synchronization beep sound, sets the PlayBeep flag in subject state,
+ * starts a 0.5-second timer to clear the flag, and also triggers TTLdown for combined
+ * ephys/fMRI experiments.
+ */
 void AMRISubjectController::PlayBeep()
 {
 	if (beepCue)
@@ -223,6 +262,9 @@ void AMRISubjectController::PlayBeep()
 }
 
 
+/**
+ * Records the time from demo start to the first TTL pulse and marks the run as started.
+ */
 void AMRISubjectController::SetSecondsToStartOfRun(float seconds)
 {
 	UE_LOG(LogMRI, Log, TEXT("First TTL at time %f seconds"), seconds);
@@ -231,6 +273,10 @@ void AMRISubjectController::SetSecondsToStartOfRun(float seconds)
 }
 
 
+/**
+ * Queries the demo subsystem for the current recording status and caches it.
+ * Called each tick before experiment logic runs.
+ */
 void AMRISubjectController::UpdateDemoState()
 {
 	if (!demoSubsystem)
@@ -244,6 +290,10 @@ void AMRISubjectController::UpdateDemoState()
 }
 
 
+/**
+ * Returns true on the first tick after demo recording transitions from recording to stopped.
+ * Uses lastDemoState/currentDemoState to detect the transition edge.
+ */
 bool AMRISubjectController::IsDemoEnded()
 {
 	switch (currentDemoState)
@@ -269,6 +319,10 @@ bool AMRISubjectController::IsDemoEnded()
 }
 
 
+/**
+ * Resets all run-level experiment state: demo state tracking, timers, eyetracking state,
+ * TTL countdown, no-TTL timer, and subject state.
+ */
 void AMRISubjectController::ResetExperimentState()
 {
 	lastDemoState = 0;
@@ -282,6 +336,9 @@ void AMRISubjectController::ResetExperimentState()
 }
 
 
+/**
+ * Increments the subject's point total by increment and fires SetDisplayPointsDelegate.
+ */
 void AMRISubjectController::UpdatePoints(int increment)
 {
 	subjectState->Points += increment;
@@ -289,6 +346,10 @@ void AMRISubjectController::UpdatePoints(int increment)
 }
 
 
+/**
+ * Sets the on-screen display text and color, records the prompt type in subject state,
+ * and starts the display countdown timer.
+ */
 void AMRISubjectController::SetDisplayText(const FString& text, double duration, EDisplayedPromptType displayedPromptType, EDisplayTextColor color)
 {
 	SetDisplayTextDelegate.ExecuteIfBound(text);
@@ -298,12 +359,17 @@ void AMRISubjectController::SetDisplayText(const FString& text, double duration,
 }
 
 
+/** Overload that accepts prompt type before duration; delegates to the primary overload. */
 void AMRISubjectController::SetDisplayText(const FString& text, EDisplayedPromptType displayedPromptType, double duration, EDisplayTextColor color)
 {
 	SetDisplayText(text, duration, displayedPromptType, color);
 }
 
 
+/**
+ * Clears the on-screen text by firing an empty string delegate, resets the text color,
+ * and calls OnEndDisplayText to notify subclasses.
+ */
 void AMRISubjectController::ClearDisplayText()
 {
 	SetDisplayTextDelegate.ExecuteIfBound(EMPTY_STRING);
@@ -312,12 +378,14 @@ void AMRISubjectController::ClearDisplayText()
 }
 
 
+/** Resets the displayed prompt type to None in subject state. Override to do more. */
 void AMRISubjectController::OnEndDisplayText()
 {
 	subjectState->displayedPromptType = EDisplayedPromptType::None;
 }
 
 
+/** Returns the cached demo subsystem, re-querying if the cache is null. */
 UMRIDemoSubsystem* AMRISubjectController::GetDemoSubsystem()
 {
 	if (!demoSubsystem)

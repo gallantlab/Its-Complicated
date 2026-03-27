@@ -27,6 +27,11 @@ FGetInputDelegate UEyelinkInterface::GetInputDelegate;
 // it's better to do an explicit compare-to-0 than to act as
 // if they return a bool
 
+/**
+ * Validates the given name against the Eyelink EDF file naming convention.
+ * The name must start with an alphanumeric character, contain only alphanumeric
+ * characters or underscores (up to 8 total), and end with ".edf".
+ */
 bool UEyelinkInterface::ValidateEyelinkFileName(const FString name)
 {
 	static const FRegexPattern EyelinkNameFormat("^[A-Za-z0-9][A-Za-z0-9_]{0,7}.edf$");
@@ -34,34 +39,51 @@ bool UEyelinkInterface::ValidateEyelinkFileName(const FString name)
 	return matcher.FindNext();
 }
 
+/** Constructs an interface with the specified Eyelink host IP address. */
 UEyelinkInterface::UEyelinkInterface(const FString eyelinkAddress)
 {
 	eyelinkIP = eyelinkAddress;
 }
 
+/** Constructs an interface with the specified operating mode. */
 UEyelinkInterface::UEyelinkInterface(EEyelinkInterfaceMode interfaceMode)
 {
 	InterfaceMode = interfaceMode;
 }
 
+/** Constructs an interface with both a host IP address and an operating mode. */
 UEyelinkInterface::UEyelinkInterface(const FString eyelinkAddress, EEyelinkInterfaceMode interfaceMode)
 {
 	eyelinkIP = eyelinkAddress;
 	InterfaceMode = interfaceMode;
 }
 
+/**
+ * Static input-key callback stub. Currently always returns 0 (no key).
+ * The void pointer parameter stands in for an InputEvent* to avoid including
+ * the Eyelink header in the Unreal header (winsock conflict).
+ */
 INT16 UEyelinkInterface::GetInputKey(void*)
 {
 	return 0;
 }
 
+/**
+ * Thin wrapper that casts the InputEvent pointer to void* before forwarding to
+ * UEyelinkInterface::GetInputKey. Required because the Eyelink C library expects
+ * a function with a concrete InputEvent* signature.
+ */
 static INT16 InputWrap(InputEvent* event)
 {
 	return UEyelinkInterface::GetInputKey((void*)event);
 }
 
 /**
- * @brief
+ * Initializes the Eyelink C library and registers all graphics/input callback hooks.
+ *
+ * Fills a HOOKFCNS structure with static member function pointers and passes it to
+ * setup_graphic_hook_functions(). Also configures special keys so that the Eyelink
+ * library does not intercept real keyboard input during gameplay.
  */
 void UEyelinkInterface::InitEyelinkLibrary()
 {
@@ -96,6 +118,13 @@ void UEyelinkInterface::InitEyelinkLibrary()
 }
 
 
+/**
+ * Opens a network connection to the Eyelink eyetracker.
+ *
+ * Updates eyelinkIP and ScreenResolution from parameters if non-empty/non-zero,
+ * then calls open_eyelink_connection. On success, switches to offline mode,
+ * reports the display resolution to the tracker, and configures event/sample filters.
+ */
 bool UEyelinkInterface::OpenEyelinkConnection(const FString& address, const FVector2D& resolution, EEyelinkInterfaceMode mode)
 {
 	// set properties if given
@@ -132,6 +161,7 @@ bool UEyelinkInterface::OpenEyelinkConnection(const FString& address, const FVec
 
 }
 
+/** Closes the connection to the Eyelink device if currently connected. */
 void UEyelinkInterface::CloseEyelinkConnection()
 {
 	if (IsEyelinkConnected())
@@ -140,6 +170,12 @@ void UEyelinkInterface::CloseEyelinkConnection()
 	}
 }
 
+/**
+ * Opens a new EDF data file on the Eyelink host computer.
+ * Stores the filename internally so it can be retrieved later via GetEyelinkFileName.
+ * @return true if the file was opened successfully; false if not connected or if the
+ *         Eyelink library returns a non-zero error code.
+ */
 bool UEyelinkInterface::OpenEyelinkDataFile(const FString fileName)
 {
 	if (IsEyelinkConnected())
@@ -158,6 +194,10 @@ bool UEyelinkInterface::OpenEyelinkDataFile(const FString fileName)
 }
 
 
+/**
+ * Closes the currently open EDF data file on the Eyelink host computer.
+ * @return true if the file was closed successfully or if no connection is active.
+ */
 bool UEyelinkInterface::CloseEyelinkDataFile(const FString fileName)
 {
 	if (IsEyelinkConnected())
@@ -168,11 +208,17 @@ bool UEyelinkInterface::CloseEyelinkDataFile(const FString fileName)
 }
 
 
+/** Returns true if an EDF data file has been opened (i.e. the stored filename is non-empty). */
 bool UEyelinkInterface::IsEyelinkDataFileOpen() const
 {
 	return !eyelinkFileName.Equals(FString(""));
 }
 
+/**
+ * Launches the Eyelink camera setup and calibration procedure on a background thread.
+ * The calibration UI is driven by the registered graphics delegates.
+ * Does nothing if the Eyelink device is not connected.
+ */
 void UEyelinkInterface::SetupCameraAndCalibrate()
 {
 	if (IsEyelinkConnected())
@@ -184,6 +230,7 @@ void UEyelinkInterface::SetupCameraAndCalibrate()
 	}
 }
 
+/** Sends the exit-calibration signal to the Eyelink device. Does nothing if not connected. */
 void UEyelinkInterface::ExitCalibration() const
 {
 	if (IsEyelinkConnected())
@@ -192,6 +239,7 @@ void UEyelinkInterface::ExitCalibration() const
 	}
 }
 
+/** Starts eyetracking data recording on the Eyelink device. Does nothing if not connected. */
 void UEyelinkInterface::StartEyetrackingRecording()
 {
 	if (IsEyelinkConnected())
@@ -200,6 +248,7 @@ void UEyelinkInterface::StartEyetrackingRecording()
 	}
 }
 
+/** Stops eyetracking data recording on the Eyelink device. Does nothing if not connected. */
 void UEyelinkInterface::StopEyetrackingRecording()
 {
 	if (IsEyelinkConnected())
@@ -208,6 +257,11 @@ void UEyelinkInterface::StopEyetrackingRecording()
 	}
 }
 
+/**
+ * Returns whether the Eyelink device is currently recording.
+ * Uses check_recording() which returns 0 if recording is active.
+ * @return true if recording; false if not recording or not connected.
+ */
 bool UEyelinkInterface::IsEyetrackingRecording() const
 {
 	if (IsEyelinkConnected())
@@ -217,6 +271,10 @@ bool UEyelinkInterface::IsEyetrackingRecording() const
 	return false;
 }
 
+/**
+ * Accepts the current fixation trigger on the Eyelink device.
+ * @return eyelink_accept_trigger() result, or -1 if not connected.
+ */
 int UEyelinkInterface::AcceptFixation()
 {
 	if (IsEyelinkConnected())
@@ -226,6 +284,10 @@ int UEyelinkInterface::AcceptFixation()
 	return -1;
 }
 
+/**
+ * Sends the special Eyelink terminate key (0x0090) to end the current trial.
+ * @return eyelink_send_keybutton() result, or -1 if not connected.
+ */
 int UEyelinkInterface::SendTerminateKey()
 {
 	if (IsEyelinkConnected())
@@ -285,6 +347,10 @@ FString UEyelinkInterface::GetEyelinkResponse() const
 	return FString("");
 }
 
+/**
+ * Sends the special Eyelink break key (0x00A0) to abort the current operation.
+ * @return eyelink_send_keybutton() result, or -1 if not connected.
+ */
 int UEyelinkInterface::SendBreakKey()
 {
 	if (IsEyelinkConnected())
@@ -294,6 +360,11 @@ int UEyelinkInterface::SendBreakKey()
 	return -1;
 }
 
+/**
+ * Sends an arbitrary keycode to the Eyelink device as a KB_PRESS event.
+ * @param keycode  The integer keycode to send.
+ * @return eyelink_send_keybutton() result, or 0 if not connected.
+ */
 int UEyelinkInterface::SendKey(int keycode)
 {
 	if (IsEyelinkConnected())
@@ -303,6 +374,11 @@ int UEyelinkInterface::SendKey(int keycode)
 	return 0;
 }
 
+/**
+ * Sends the screen resolution to the Eyelink device via both a command and a message.
+ * The command sets screen_pixel_coords; the message records DISPLAY_COORDS in the EDF.
+ * @param resolution  Display dimensions in pixels.
+ */
 void UEyelinkInterface::SetEyelinkResolution(const FVector2D& resolution)
 {
 	if (IsEyelinkConnected())
@@ -315,6 +391,12 @@ void UEyelinkInterface::SetEyelinkResolution(const FVector2D& resolution)
 }
 
 
+/**
+ * Unbinds all currently bound calibration and camera-image delegates.
+ *
+ * Checks each delegate before unbinding to avoid unbinding already-unbound delegates.
+ * Call this after calibration is complete to minimize Eyelink's influence on gameplay.
+ */
 void UEyelinkInterface::UnbindDelegates()
 {
 	if (ExitCalibrationDisplayDelegate.IsBound())
@@ -342,6 +424,11 @@ void UEyelinkInterface::UnbindDelegates()
 
 
 // === Delegate calls for the eyelink ===
+
+/**
+ * Static Eyelink callback: dispatches SetupCalibrationDisplayDelegate on the game thread.
+ * @return 0 always (Eyelink ignores the return value for this hook).
+ */
 INT16 UEyelinkInterface::SetupCalibrationDisplay()
 {
 	if (UEyelinkInterface::SetupCalibrationDisplayDelegate.IsBound())
@@ -355,12 +442,19 @@ INT16 UEyelinkInterface::SetupCalibrationDisplay()
 	return 0;
 }
 
+/** Static Eyelink callback: fires ExitCalibrationDisplayDelegate synchronously. */
 void UEyelinkInterface::ExitCalibrationDisplay()
 {
 	UE_LOG(LogEyelink, Log, TEXT("Exit calibration display delegate called"));
 	UEyelinkInterface::ExitCalibrationDisplayDelegate.ExecuteIfBound();
 }
 
+/**
+ * Static Eyelink callback: dispatches InitCameraImageDisplayDelegate on the game thread.
+ * @param width   Width of the camera image in pixels.
+ * @param height  Height of the camera image in pixels.
+ * @return 0 always.
+ */
 INT16 UEyelinkInterface::InitCameraImageDisplay(INT16 width, INT16 height)
 {
 	if (UEyelinkInterface::InitCameraImageDisplayDelegate.IsBound())
@@ -374,6 +468,11 @@ INT16 UEyelinkInterface::InitCameraImageDisplay(INT16 width, INT16 height)
 	return 0;
 }
 
+/**
+ * Static Eyelink callback: dispatches UpdateCameraImageTitleDelegate on the game thread.
+ * @param threshold  Pupil threshold value provided by Eyelink (passed as log context).
+ * @param title      Null-terminated ANSI title string from the Eyelink library.
+ */
 void UEyelinkInterface::UpdateCameraImageTitle(INT16 threshold, char* title)
 {
 	UE_LOG(LogEyelink, Log, TEXT("Update camera image title delegate called threshold %d title %s"), threshold, ANSI_TO_TCHAR(title));
@@ -383,24 +482,37 @@ void UEyelinkInterface::UpdateCameraImageTitle(INT16 threshold, char* title)
 	});
 }
 
+/**
+ * Static Eyelink callback: fires DrawOneCameraImageLineDelegate with the pixel data.
+ * @param width     Width of the image line in pixels.
+ * @param line      Index of the current horizontal scan line.
+ * @param numLines  Total number of lines in the image.
+ * @param pixels    Pointer to the raw pixel data for this line.
+ */
 void UEyelinkInterface::DrawOneCameraImageLine(INT16 width, INT16 line, INT16 numLines, byte* pixels)
 {
 	UE_LOG(LogEyelink, Log, TEXT("Draw one camera image line delegate called width %d line %d numLines %d"), width, line, numLines);
 	UEyelinkInterface::DrawOneCameraImageLineDelegate.ExecuteIfBound(width, line, numLines, pixels);
 }
 
+/**
+ * Static Eyelink callback: called to set the camera image color palette.
+ * Currently a no-op stub; palette-based rendering is not implemented.
+ */
 void UEyelinkInterface::SetCameraImagePalette(INT16, byte[], byte[], byte[])
 {
 	UE_LOG(LogEyelink, Log, TEXT("Set camera image palette delegate called"));
 	//TODO: this
 }
 
+/** Static Eyelink callback: fires ExitCameraImageDisplayDelegate to close the camera view. */
 void UEyelinkInterface::ExitCameraImageDisplay()
 {
 	UE_LOG(LogEyelink, Log, TEXT("Exit camera image display delegate called"));
 	UEyelinkInterface::ExitCameraImageDisplayDelegate.ExecuteIfBound();
 }
 
+/** Static Eyelink callback: dispatches ClearCalibrationDisplayDelegate on the game thread. */
 void UEyelinkInterface::ClearCalibrationDisplay()
 {
 	UE_LOG(LogEyelink, Log, TEXT("Clear calibration diisplay delegate called"));
@@ -410,6 +522,7 @@ void UEyelinkInterface::ClearCalibrationDisplay()
 	});
 }
 
+/** Static Eyelink callback: dispatches EraseCalibrationTargetDelegate on the game thread. */
 void UEyelinkInterface::EraseCalibrationTarget()
 {
 	UE_LOG(LogEyelink, Log, TEXT("Erase calibration target delegate called"));
@@ -419,6 +532,11 @@ void UEyelinkInterface::EraseCalibrationTarget()
 	});
 }
 
+/**
+ * Static Eyelink callback: dispatches DrawCalibrationTargetDelegate on the game thread.
+ * @param x  Horizontal screen coordinate for the calibration target.
+ * @param y  Vertical screen coordinate for the calibration target.
+ */
 void UEyelinkInterface::DrawCalibrationTarget(INT16 x, INT16 y)
 {
 	UE_LOG(LogEyelink, Log, TEXT("Draw calibration target delegate called x %d y %d"), x, y);
@@ -428,11 +546,20 @@ void UEyelinkInterface::DrawCalibrationTarget(INT16 x, INT16 y)
 	});
 }
 
+/** Returns true if the Eyelink device is currently connected, via eyelink_is_connected(). */
 bool UEyelinkInterface::IsEyelinkConnected() const
 {
 	return eyelink_is_connected();
 }
 
+/**
+ * Transfers the named EDF file from the Eyelink host to the local Saved directory.
+ *
+ * Converts the destination path to an absolute external path before calling
+ * receive_data_file(). Returns true if the transfer was successful (retval > 0).
+ * @param fileName  Name of the EDF file on the Eyelink host computer.
+ * @return true if the file was received successfully.
+ */
 bool UEyelinkInterface::RetrieveRemoteDataFile(const FString fileName)
 {
 	IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
