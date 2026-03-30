@@ -45,6 +45,11 @@ External link: [https://github.com/candytaco/driving-utilities](https://github.c
 
 External link: [https://github.com/gallantlab/demofiles](https://github.com/gallantlab/demofiles)
 
+## Misc stuff that are not directly experiment-related
+
+### Unreal Doxygen
+A package for generating documentation for Unreal C++. It includes a preprocessor parser to take care of Unreal Macros for Doxygen, and a tool to translate the Doxygen XML outputs to clean markdown for making a static site through Zensical. Used for the generating the Unreal Plugins API documentation in this repo.
+
 ## Workflow Summary
 
 [Placeholder: a diagram or step-by-step description of how all tools connect. Data collection (MRIExperiment + Eyelink + GameMonitor) → raw outputs (demo files, eye data, screen recordings) → post-processing (SharpEyes, Driving-utilities, Demofiles) → analysis regressors.]

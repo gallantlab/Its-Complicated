@@ -3,7 +3,6 @@
 
 #include "MRIExperiment.h"
 #include "Demo/MRIDemoSubsystem.h"
-#include "Settings/MRISettings.h"
 
 #include "Runtime/NetworkReplayStreaming/NullNetworkReplayStreaming/Public/NullNetworkReplayStreaming.h"
 #include "Runtime/Core/Public/HAL/FileManager.h"
@@ -23,17 +22,10 @@ void UMRIDemoSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
-	settings = NewObject<UMRISettings>(this, TEXT("MRISettings"));
-	check(settings != nullptr);
-	settings->LoadSettings();
-	settings->LogSettings();
-
 	playerPawn = nullptr;
 	playerPawnName = nullptr;
 	demoStartTime = FDateTime::Now();
 	allDemos = TArray<FString>();
-	bIsAutoRender = settings->RenderAll > 0;
-	experimentType = settings->GetExperimentType();
 
 	// Create a replay streamer for FindReplays() and DeleteReplay()
 	EnumerateStreamsPtr = FNetworkReplayStreaming::Get().GetFactory().CreateReplayStreamer();
@@ -61,16 +53,10 @@ void UMRIDemoSubsystem::Deinitialize()
 // Settings access
 // ---------------------------------------------------------------------------
 
-UMRISettings& UMRIDemoSubsystem::GetSettings()
-{
-	check(settings != nullptr);
-	return *settings;
-}
-
-const UMRISettings& UMRIDemoSubsystem::GetSettings() const
-{
-	check(settings != nullptr);
-	return *settings;
+void UMRIDemoSubsystem::ReadSettings(UMRISettings* settings)
+{	
+	bIsAutoRender = settings->RenderAll > 0;
+	experimentType = settings->GetExperimentType();
 }
 
 // ---------------------------------------------------------------------------

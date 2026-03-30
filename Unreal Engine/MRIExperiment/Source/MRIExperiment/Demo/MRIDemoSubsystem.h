@@ -22,7 +22,7 @@ class UMRISettings;
  * so that UI widgets can display a list of available recordings.
  */
 USTRUCT(BlueprintType)
-struct FS_ReplayInfo
+struct FReplayInfo
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -53,7 +53,7 @@ struct FS_ReplayInfo
 	 * @param NewTimestamp     Recording timestamp.
 	 * @param NewLengthInMS    Duration in milliseconds.
 	 */
-	FS_ReplayInfo(FString NewName, FString NewFriendlyName, FDateTime NewTimestamp, int32 NewLengthInMS)
+	FReplayInfo(FString NewName, FString NewFriendlyName, FDateTime NewTimestamp, int32 NewLengthInMS)
 	{
 		ReplayName = NewName;
 		FriendlyName = NewFriendlyName;
@@ -66,7 +66,7 @@ struct FS_ReplayInfo
 	 * Default constructor. Creates an invalid placeholder entry.
 	 * bIsValid will be false to indicate no real data is present.
 	 */
-	FS_ReplayInfo()
+	FReplayInfo()
 	{
 		ReplayName = "Replay";
 		FriendlyName = "Replay";
@@ -95,6 +95,7 @@ public:
 	/**
 	 * Called by Unreal when the subsystem is created. Loads MRISettings,
 	 * determines the experiment type, and prepares the replay streamer.
+	 * **Note**: Post-init, find the settings object and call ReadSettings to get the replay settings for this instance.
 	 * @param Collection  The subsystem collection managing this subsystem.
 	 */
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
@@ -105,28 +106,12 @@ public:
 	 */
 	virtual void Deinitialize() override;
 
-	// ------------------------------------------------------------------
-	// Settings access
-	// ------------------------------------------------------------------
-
 	/**
-	 * Returns a reference to the current MRI settings object.
-	 * @return Reference to the loaded UMRISettings instance.
+	 * Reads relevant settings from the settings object
+	 * 
+	 * @param settings pointer to loaded settings object
 	 */
-	UMRISettings& GetSettings();
-
-	/**
-	 * Returns a const reference to the current MRI settings object.
-	 * @return Const reference to the loaded UMRISettings instance.
-	 */
-	const UMRISettings& GetSettings() const;
-
-	/**
-	 * Returns a pointer to the current MRI settings for Blueprint access.
-	 * @return Pointer to the UMRISettings object.
-	 */
-	UFUNCTION(BlueprintCallable, Category = "MRI")
-	UMRISettings* GetMRISettings() { return settings; }
+	void ReadSettings(UMRISettings* settings);
 
 	// ------------------------------------------------------------------
 	// Replay state queries
@@ -371,10 +356,6 @@ public:
 
 private:
 
-	/** Loaded MRI settings for this session. */
-	UPROPERTY()
-	UMRISettings* settings;
-
 	/** Experiment type read from settings. */
 	EExperimentType experimentType;
 
@@ -403,7 +384,7 @@ private:
 	FOnEnumerateStreamsComplete OnEnumerateStreamsCompleteDelegate;
 	/**
 	 * Callback invoked when replay enumeration completes.
-	 * Converts the raw stream info list into FS_ReplayInfo structs and fires BP_OnFindReplaysComplete.
+	 * Converts the raw stream info list into FReplayInfo structs and fires BP_OnFindReplaysComplete.
 	 * @param StreamInfos  Array of replay stream metadata returned by the streamer.
 	 */
 	void OnEnumerateStreamsComplete(const TArray<FNetworkReplayStreamInfo>& StreamInfos);
@@ -437,8 +418,8 @@ protected:
 	/**
 	 * Blueprint event fired when replay enumeration completes.
 	 * Implement in Blueprint to update a replay-selection UI.
-	 * @param AllReplays  Array of FS_ReplayInfo structs describing each available replay.
+	 * @param AllReplays  Array of FReplayInfo structs describing each available replay.
 	 */
 	UFUNCTION(BlueprintImplementableEvent, Category = "Replays")
-	void BP_OnFindReplaysComplete(const TArray<FS_ReplayInfo>& AllReplays);
+	void BP_OnFindReplaysComplete(const TArray<FReplayInfo>& AllReplays);
 };
