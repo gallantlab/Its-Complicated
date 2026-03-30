@@ -28,7 +28,7 @@ A standalone program that runs in the background to an experiment. It talks to E
 External link: [https://github.com/gallantlab/gamemonitor](https://github.com/gallantlab/gamemonitor)
 
 ### SharpEyes
-A tool for eyetracking. It fins pupils in raw eye video recordings, and also allows the user to view the fixation overlaid on the stimulus, and to manually correct eyetracking errors.
+A tool for eyetracking. It finds pupils in raw eye video recordings, and also allows the user to view the fixation overlaid on the stimulus, and to manually correct eyetracking errors.
 
 External link: [https://github.com/candytaco/SharpEyes](https://github.com/candytaco/SharpEyes)
 
@@ -37,12 +37,12 @@ External link: [https://github.com/candytaco/SharpEyes](https://github.com/candy
 These libraries operate on the data produced by the above tools to extract features for analysis.
 
 ### Driving-utilities
-A python libary that reads outputs from a the driving simulator to produce features for analysis.
+A Python library that reads outputs from the driving simulator to produce features for analysis.
 
 External link: [https://github.com/candytaco/driving-utilities](https://github.com/candytaco/driving-utilities)
 
 ### Demofiles
-A python libaray to parse the recordings produced by Source Engine games.
+A Python library to parse the recordings produced by Source Engine games.
 
 External link: [https://github.com/gallantlab/demofiles](https://github.com/gallantlab/demofiles)
 

@@ -13,7 +13,7 @@ This is a collection of tools collected from a bunch of different experiments an
 This is not a suite of tools that lets you plop in a scientific idea and just run it. That's not feasible given how each unique situation is. These tools rather give you perspective on how to tackle the chaos that closed-loop/complex experiments create.
 
 ### Unreal Plugins
-These plugins you build an experiment from the ground-up in Unreal Engine. Obviously, you can lift the logic and apply it to other engines like Unity.
+These plugins help you build an experiment from the ground-up in Unreal Engine. Obviously, you can lift the logic and apply it to other engines like Unity.
 #### MRIExperiment
 This is lifted out of the driving simulator. These things take care of the experiment logic framework in Unreal that makes all the things possible.
 
@@ -31,9 +31,9 @@ Because eyetracking is messy, this lets you manually correct eyetracking stuff, 
 
 
 ### Python libraries
-These things are help for taking your outputs and pulling numbers out of them so you can do science.
+These are tools for taking your outputs and pulling numbers out of them so you can do science.
 #### [Driving-utilities](https://github.com/candytaco/driving-utilities)
 A thing that can deal with the frames rendered out by the game engine and make useful features out of them
 
 #### [Demofiles](https://github.com/gallantlab/demofiles)
-A thing to read demofiles put out by Source Engine-based games. This was started off by James, then I improved upon it, and then Circle Chen (undergrad who I was workign with through Alane for the Portal 2 stuff) improved upon it some more.
+A thing to read demofiles put out by Source Engine-based games. This was started off by James, then I improved upon it, and then Circle Chen (undergrad who I was working with through Alane for the Portal 2 stuff) improved upon it some more.
