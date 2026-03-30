@@ -15,7 +15,7 @@ The methods described here is still orders of magnitude more complicated than an
 
 This guide is composed of a few parts:
 
-* The programming paradigm and architecture for building such experiments
-* The flow of running these experiments
-* Some standalone tools that we have developed over the years to enable these experiments
-* An Unreal Engine plugin that implements the overall paradigm and the API reference for this plugin
+#### [The programming paradigm and architecture for building such experiments](Experiment-building/Experiment-Concepts.md)
+#### [Concepts from game engine for MRI experiments](Experiment-building/game-design.md)
+#### [Some standalone tools that we have developed over the years to enable these experiments](Experiment-building/tools.md)
+#### [Unreal Engine plugins that implements the overall paradigm and the API reference for this plugin](Unreal-Engine/index.md)

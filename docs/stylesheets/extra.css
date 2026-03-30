@@ -10,7 +10,13 @@
 .md-typeset h4,
 .md-typeset h5,
 .md-typeset h6 {
-	margin-bottom: 0.5em;
+	margin-bottom: 6pt;
+}
+
+/* Remove paragraph spacing */
+.md-typeset p {
+	margin-top: 0;
+	margin-bottom: 6pt;
 }
 
 /* Remove all rounded corners */
