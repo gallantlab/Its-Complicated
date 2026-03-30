@@ -23,7 +23,7 @@ jobs:
       - run: sudo apt-get install -y doxygen
       - run: doxygen Doxyfile
       - run: pip install lxml
-      - run: python3 "XML to markdown.py" --output-dir docs/Unreal-Engine
+      - run: python3 "XML to markdown.py" --output-dir docs/Unreal-Plugins
       - run: pip install zensical
       - run: zensical build --clean
       - uses: actions/upload-pages-artifact@v4
