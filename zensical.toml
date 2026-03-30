@@ -27,7 +27,8 @@ site_author = "t.zhang@berkeley.edu"
 # The site_url is the canonical URL for your site. When building online
 # documentation you should set this.
 # Read more: https://zensical.org/docs/setup/basics/#site_url
-#site_url = "https://www.example.com/"
+repo_url = "https://www.github.com/gallantlab/its-complicated/"
+repo_name = "gallantlab/its-complicated"
 
 # The copyright notice appears in the page footer and can contain an HTML
 # fragment.
@@ -267,6 +268,7 @@ features = [
 # ----------------------------------------------------------------------------
 [project.theme.icon]
 logo = "lucide/brain-circuit"
+repo = "fontawesome/brands/github-alt"
 
 # ----------------------------------------------------------------------------
 # In the "font" subsection you can configure the fonts used. By default, fonts

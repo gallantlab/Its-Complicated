@@ -3,6 +3,11 @@
 	max-width: 100%;
 }
 
+/* Remove right padding from the header so the search box is flush with the right edge */
+.md-header__inner {
+	padding-right: 0;
+}
+
 /* Match heading bottom spacing to paragraph spacing (0.5em) */
 .md-typeset h1,
 .md-typeset h2,
