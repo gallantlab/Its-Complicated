@@ -2,25 +2,18 @@
 
 \<Insert Avril Lavigne reference here>
 
-This is a gross oversimplification, but traditional experiments are input-driven and open loop, which makes data collection and analysis relatively straight forward.
+This is a gross oversimplification, but traditional experiments are open-loop and parametric, which makes data collection and analysis relatively straightforward.
 
-If you want to do closed loop, input-output experiments, things get suddenly very complicated thanks to emergent complexity and chaos. But these experiments are more fun. But if you try to run it all by hand or in the traditional ways, you'll end up like Spongebob.
-
-![](Images/spongebob.gif)
-
-To make these experiments more tractable, I've made variaous tools on and off. This repo collects all of them here.
+If you want to do closed loop naturalistic experiments that better reflect real-world situations, things get suddenly very complicated thanks to emergent complexity and chaos. But these experiments are more fun. However, traditional software platforms aren't appropriate for these experiments. This repo provides a set of tools and a description of the approach to implement things in a game engine.
 
 ##### What this is
 This is a collection of tools collected from a bunch of different experiments and across time. They reflect an approach to running things in the MRI. These tools each all simplify or make possible some aspect of complex closed-loop experiments.
 
 ##### What this isn't
-This is not a suite of tools that lets you plop in a scientific idea and just run it. That's... not feasible given how each unique situation is. 
-
-In fact, some of these tools intentially will not compile, or will segfault if you try to run them out of the box. These tools rather give you perspective on how to tackle the chaos that closed-loop/complex experiments create.
-
+This is not a suite of tools that lets you plop in a scientific idea and just run it. That's not feasible given how each unique situation is. These tools rather give you perspective on how to tackle the chaos that closed-loop/complex experiments create.
 
 ### Unreal Plugins
-These things here help you build an experiment from the ground-up in Unreal Engine. Obviously, you can lift the logic and apply it to other engines like Unity.
+These plugins you build an experiment from the ground-up in Unreal Engine. Obviously, you can lift the logic and apply it to other engines like Unity.
 #### MRIExperiment
 This is lifted out of the driving simulator. These things take care of the experiment logic framework in Unreal that makes all the things possible.
 
