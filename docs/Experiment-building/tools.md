@@ -46,7 +46,7 @@ A Python library to parse the recordings produced by Source Engine games.
 
 External link: [https://github.com/gallantlab/demofiles](https://github.com/gallantlab/demofiles)
 
-## Misc stuff that are not directly experiment-related
+## Miscellaneous tools that are not directly experiment-related
 
 ### Unreal Doxygen
 A package for generating documentation for Unreal C++. It includes a preprocessor parser to take care of Unreal Macros for Doxygen, and a tool to translate the Doxygen XML outputs to clean markdown for making a static site through Zensical. Used for the generating the Unreal Plugins API documentation in this repo.
