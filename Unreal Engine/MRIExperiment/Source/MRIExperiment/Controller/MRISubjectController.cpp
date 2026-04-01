@@ -75,6 +75,7 @@ void AMRISubjectController::Possess(APawn* pawn)
 	check(subjectState != nullptr);
 	subjectState->NetUpdateFrequency = 30;
 	subjectState->MinNetUpdateFrequency = 30;
+	pawn->Tags.Add(PlayerTag);
 }
 
 

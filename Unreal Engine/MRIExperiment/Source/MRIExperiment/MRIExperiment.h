@@ -39,6 +39,6 @@ public:
 };
 
 /** Actor tag used to identify the subject (player) pawn in the world. */
-static FName MRIPlayerTag = FName(TEXT("Player"));
+static FName PlayerTag = FName(TEXT("Player"));
 /** Actor tag used to identify NPC (non-player character) pawns in the world. */
-static FName MRINPCTag = FName(TEXT("NPC"));
+static FName NPCTag = FName(TEXT("NPC"));
