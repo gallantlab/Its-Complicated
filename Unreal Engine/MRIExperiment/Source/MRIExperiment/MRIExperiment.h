@@ -19,7 +19,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogMRI, Log, All);
  * - Settings I/O
  *
  * Many of the logic here are scaffolds for building experiments, and the user
- * will need to subclass and implement many of the virutal functions, and also
+ * will need to subclass and implement many of the virtual functions, and also
  * extend some enum definitions.
  */
 class FMRIExperimentModule : public IModuleInterface
