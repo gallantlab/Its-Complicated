@@ -3,4 +3,4 @@
 skip = .git,.gitignore,.gitattributes,*.css,.codespellrc
 check-hidden = true
 # ignore-regex = 
-# ignore-words-list =
+ignore-words-list = ue,thirdparty

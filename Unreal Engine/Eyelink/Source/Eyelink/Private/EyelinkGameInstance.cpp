@@ -9,7 +9,7 @@ UEyelinkGameInstance::UEyelinkGameInstance()
 {
 	// Eyelink
 	// TODO: Should this happen here, or should we leave it to be called from UI at runtime?
-	// I mean it seems to work so let's not worry about this TODO until somthing borks
+	// I mean it seems to work so let's not worry about this TODO until something borks
 	Eyelink = CreateDefaultSubobject<UEyelinkInterface>(TEXT("EyelinkInterface"));
 
 	Eyelink->InitEyelinkLibrary();

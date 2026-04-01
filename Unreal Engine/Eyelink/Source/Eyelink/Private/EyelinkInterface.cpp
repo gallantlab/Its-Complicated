@@ -276,7 +276,7 @@ FString UEyelinkInterface::GetEyelinkResponse() const
 		int res = eyelink_command_result();
 		char FARTYPE message[256];
 		int length = eyelink_last_message(message);
-		message[length] = '\0';	// Just to make sure we temrinate the string correctly
+		message[length] = '\0';	// Just to make sure we terminate the string correctly
 		return FString(message);
 	}
 	return FString("");
