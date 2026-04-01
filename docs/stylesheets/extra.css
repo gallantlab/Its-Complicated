@@ -88,8 +88,7 @@
 /* Hide the right-hand "On this page" sidebar at 1440px (90em),
    before the left navigation becomes a drawer at 780px (48.75em).
    This ensures the TOC collapses first as the screen narrows. */
-@media screen and (max-width: 90em) {
-	.md-sidebar--secondary {
+
+.md-sidebar--secondary {
 		display: none !important;
 	}
-}
