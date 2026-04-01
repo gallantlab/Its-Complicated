@@ -11,10 +11,16 @@
 DECLARE_LOG_CATEGORY_EXTERN(LogMRI, Log, All);
 
 /**
- * Primary module class for the MRI Experiment plugin.
+ * A plugin containing logic for running MRI experiments in Unreal Engine.
  *
- * Implements the IModuleInterface lifecycle callbacks so that Unreal Engine
- * can load and unload the plugin at the appropriate times.
+ * Implements logic useful for MRI experiments, including:
+ * - replication and information extraction / re-rendering
+ * - basic TTL handling and skeleton for experiment logic
+ * - Settings I/O
+ *
+ * Many of the logic here are scaffolds for building experiments, and the user
+ * will need to subclass and implement many of the virutal functions, and also
+ * extend some enum definitions.
  */
 class FMRIExperimentModule : public IModuleInterface
 {
