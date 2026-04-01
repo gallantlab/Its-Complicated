@@ -1,16 +1,20 @@
-## It's Complicated
+## It's Complicated: A guide to closed-loop, naturalistic, and complex fMRI experiments
 
 \<Insert Avril Lavigne reference here>
 
-This is a gross oversimplification, but traditional experiments are open-loop and parametric, which makes data collection and analysis relatively straightforward.
+Real-world experiences are a continuous perception-decision-action loop, and an often unspoken assumption in neuroscience is that we want to understand how the brain behaves in the real world. Yet, most of our laboratory experiments use open-loop experiments that don't allow for naturalistic interaction. Because the the brain is nonlinear, it's unclear whether such open-loop experiments can really tell us how the brain behaves in the real world.
 
-If you want to do closed loop naturalistic experiments that better reflect real-world situations, things suddenly get very complicated thanks to emergent complexity and chaos. But these experiments are more fun. However, traditional software platforms aren't appropriate for these experiments. This repo provides a set of tools and a description of the approach to implement things in a game engine.
+The experimental challenge to closed-loop naturalistic experiments that better reflect real-world situations is that things suddenly get very complicated thanks to emergent complexity and chaos. Traditional experimental software platforms aren't appropriate or capable for these experiments. We use a game engine to overcomes the software limitations, and in this repo we provide a guide for how to make experiments in game engines.
+
+This repo is composed of two parts:
+- A conceptual overview on the paradigm differences between closed-loop experiments in game engine versus open-loop experiments in more tradition experimental software. This is mainly found in the documentation, and is on [the page hosted on our lab website](https://gallantlab.org/Its-Complicated).
+- A set of practical tools. Primarily, the experiment infrastructure has been distilled into a Unreal plugin, which can be dropped into new Unreal projects. The code is hosted in this repo, and a guide and API reference are also in the docs/hosted page.
 
 ##### What this is
-This is a collection of tools collected from a bunch of different experiments and across time. They reflect an approach to running things in the MRI. These tools each simplify or make possible some aspect of complex closed-loop experiments.
+This is a collection of tools that reflect an approach to running things in the MRI. These tools each simplify or make possible some aspect of complex closed-loop experiments.
 
 ##### What this isn't
-This is not a suite of tools that lets you plop in a scientific idea and just run it. That's not feasible given how unique each situation is. These tools rather give you perspective on how to tackle the chaos that closed-loop/complex experiments create.
+This is not a ready-to-go experiment builder. That's not feasible given how unique each situation is. These tools rather give you the paradigm and infrastructure to build experiments from scratch.
 
 ### Unreal Plugins
 These plugins help you build an experiment from the ground-up in Unreal Engine. Obviously, you can lift the logic and apply it to other engines like Unity.
@@ -31,9 +35,5 @@ Because eyetracking is messy, this lets you manually correct eyetracking stuff, 
 
 
 ### Python libraries
-These are tools for taking your outputs and pulling numbers out of them so you can do science.
-#### [Driving-utilities](https://github.com/candytaco/driving-utilities)
-A thing that can deal with the frames rendered out by the game engine and make useful features out of them
-
 #### [Demofiles](https://github.com/gallantlab/demofiles)
-A thing to read demofiles put out by Source Engine-based games. This was started off by James, then I improved upon it, and then Circle Chen (undergrad who I was working with through Alane for the Portal 2 stuff) improved upon it some more.
+A Python library to read demofiles put out by Source Engine-based games.
