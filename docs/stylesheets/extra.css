@@ -9,19 +9,20 @@
 }
 
 /* Match heading bottom spacing to paragraph spacing (0.5em) */
-.md-typeset h1,
-.md-typeset h2,
+.md-typeset h1 {margin-top: 6pt; margin-bottom: 2pt;} 
+.md-typeset h2 {margin-top: 4pt; margin-bottom: 2pt;} 
 .md-typeset h3,
 .md-typeset h4,
 .md-typeset h5,
-.md-typeset h6 {
-	margin-bottom: 6pt;
+.md-typeset h6 {	
+	margin-top: 2pt;
+	margin-bottom: 2pt;
 }
 
 /* Remove paragraph spacing */
 .md-typeset p {
 	margin-top: 0;
-	margin-bottom: 6pt;
+	margin-bottom: 4pt;
 }
 
 /* Remove all rounded corners */
