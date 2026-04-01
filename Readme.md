@@ -1,4 +1,5 @@
 ## It's Complicated: A guide to closed-loop, naturalistic, and complex fMRI experiments
+[![DOI](https://zenodo.org/badge/1189823649.svg)](https://doi.org/10.5281/zenodo.19373749)
 
 \<Insert Avril Lavigne reference here>
 
