@@ -1,3 +1,7 @@
+<div style="text-align: center;">
+<img src="Images/logo.png" width="192" height="192"/>
+</div>
+
 ## It's Complicated: A guide to closed-loop, naturalistic, and complex fMRI experiments
 [![DOI](https://zenodo.org/badge/1189823649.svg)](https://doi.org/10.5281/zenodo.19373749)
 
