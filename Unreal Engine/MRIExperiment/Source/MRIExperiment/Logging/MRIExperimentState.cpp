@@ -52,7 +52,14 @@ void MRIExperimentState::RecordStates(TArray<const UMRIAgentComponent*> agents)
 
 void MRIExperimentState::Visit(const UMRIAgentComponent& agent)
 {
-	*(int*) 0 = 0;
+	// Fatal log: deliberately crashes in all build configurations, carrying the
+	// message into the crash report. An unimplemented Visit() must not go unnoticed.
+	UE_LOG(LogMRI, Fatal, TEXT("No Visit() override for agent component class %s."), *agent.GetClass()->GetName());
+}
+
+void MRIExperimentState::Visit(const UMRIPlayerAgentComponent& agent)
+{
+	UE_LOG(LogMRI, Fatal, TEXT("Visit() not overridden for the player agent component."));
 }
 
 void MRIExperimentState::WriteToFile(ofstream& logFile, int& indentation)

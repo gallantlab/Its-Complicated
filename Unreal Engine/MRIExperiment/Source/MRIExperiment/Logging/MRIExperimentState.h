@@ -140,7 +140,7 @@ public:
 
 	/**
 	 * Called by UMRIAgentComponent::AcceptVisitor to record this agent's state.
-	 * Fallback implementation: records the entity as Unknown and logs an error.
+	 * Fallback implementation: logs a Fatal error (deliberate crash).
 	 * Override in your experiment's state subclass for each agent component type you handle.
 	 * @param agent  The agent component being visited.
 	 */
@@ -148,7 +148,7 @@ public:
 
 	/**
 	 * Called by UMRIPlayerAgentComponent::AcceptVisitor. Fallback implementation:
-	 * records the entity as Unknown and logs an error. Override in your experiment's
+	 * logs a Fatal error (deliberate crash). Override in your experiment's
 	 * state subclass to record the entity as EEntityType::Player.
 	 * @param agent  The player agent component being visited.
 	 */
