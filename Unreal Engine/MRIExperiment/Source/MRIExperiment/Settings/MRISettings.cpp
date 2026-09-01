@@ -6,7 +6,6 @@
 #include "Misc/ConfigCacheIni.h"
 #include "Misc/CommandLine.h"
 #include "Misc/Paths.h"
-#include "HAL/PlatformFilemanager.h"
 #include "Misc/FileHelper.h"
 
 // ---------------------------------------------------------------------------
@@ -175,7 +174,7 @@ void UMRISettings::LoadSettingsFromFile(const FString &FilePath, bool bLogOnFail
 void UMRISettings::LoadSettingsFromString(const FString &INIStyleString)
 {
 	FConfigFile ConfigFile;
-	ConfigFile.CombineFromBuffer(INIStyleString);
+	ConfigFile.CombineFromBuffer(INIStyleString, TEXT("MRISettings"));
 
 	ApplyConfigToSettings(ConfigFile, *this);
 }
