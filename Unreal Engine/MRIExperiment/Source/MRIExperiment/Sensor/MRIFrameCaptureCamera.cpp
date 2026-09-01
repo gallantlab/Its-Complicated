@@ -62,7 +62,6 @@ void AMRIFrameCaptureCamera::InitCaptureRender()
 {
 	captureRenderTarget = NewObject<UTextureRenderTarget2D>();
 	captureRenderTarget->InitCustomFormat(sizeX, sizeY, PF_B8G8R8A8, false);
-	captureRenderTarget->InitAutoFormat = PF_B8G8R8A8;
 
 	captureComponent2D->TextureTarget = captureRenderTarget;
 	captureComponent2D->CaptureSource = SCS_FinalColorLDR;
@@ -143,9 +142,9 @@ bool AMRIFrameCaptureCamera::SaveCaptureToDisk(const FString& filePath)
 
 	IImageWrapperModule& imageWrapperModule = FModuleManager::LoadModuleChecked<IImageWrapperModule>(FName("ImageWrapper"));
 	TSharedPtr<IImageWrapper> imageWrapper = imageWrapperModule.CreateImageWrapper(EImageFormat::PNG);
-	imageWrapper->SetRaw(bitMap.GetData(), bitMap.GetAllocatedSize(), sizeX, sizeY, ERGBFormat::BGRA, 8);
+	imageWrapper->SetRaw(bitMap.GetData(), bitMap.Num() * sizeof(FColor), sizeX, sizeY, ERGBFormat::BGRA, 8);
 
-	const TArray<uint8>& pngData = imageWrapper->GetCompressed(100);
+	TArray64<uint8> pngData = imageWrapper->GetCompressed(100);
 	return FFileHelper::SaveArrayToFile(pngData, *filePath);
 }
 
