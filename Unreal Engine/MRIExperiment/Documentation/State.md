@@ -17,3 +17,5 @@ Subclass `AMRISubjectState` for your experiment, and then set it as the `PlayerS
 To read subject state during replay, cast the reference pawn's `PlayerState` to your class, and read out the properties you implemented.
 
 When subclassing, override `GetLifetimeReplicatedProps()` (call Super first), `CopyProperties()` (call Super first), and `ResetExperimentState()` (call Super first) to include your new properties. Remember to declare your experiment's controller as a friend class if it needs direct write access.
+
+The friend declaration on the base class covers only `AMRISubjectController` itself, not its subclasses. State subclasses can write the two experiment-state fields through the protected setters `SetPoints()` and `SetDisplayedPromptType()`; the TTL fields remain private and are written only by the base controller.

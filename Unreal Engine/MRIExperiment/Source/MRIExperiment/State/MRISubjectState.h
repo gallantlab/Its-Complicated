@@ -191,6 +191,30 @@ public:
 		return displayedPromptType;
 	}
 
+protected:
+
+	/**
+	 * Sets the subject's accumulated points.
+	 * Protected so that subclasses can write the field; friendship with
+	 * AMRISubjectController does not extend to subclasses.
+	 * @param newPoints  New points total.
+	 */
+	void SetPoints(int newPoints)
+	{
+		Points = newPoints;
+	}
+
+	/**
+	 * Sets the type of prompt recorded as currently displayed.
+	 * Protected so that subclasses can write the field; friendship with
+	 * AMRISubjectController does not extend to subclasses.
+	 * @param type  Prompt type to record.
+	 */
+	void SetDisplayedPromptType(EDisplayedPromptType type)
+	{
+		displayedPromptType = type;
+	}
+
 private:
 
 	friend class AMRISubjectController;

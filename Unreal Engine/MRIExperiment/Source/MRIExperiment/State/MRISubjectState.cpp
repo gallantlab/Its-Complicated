@@ -21,10 +21,7 @@ AMRISubjectState::AMRISubjectState()
 void AMRISubjectState::Reset()
 {
 	Super::Reset();
-	TTL = false;
-	TotalTTLs = 0;
-	Points = 0;
-	displayedPromptType = EDisplayedPromptType::None;
+	ResetExperimentState();
 }
 
 void AMRISubjectState::ResetExperimentState()
