@@ -1,8 +1,6 @@
 // MRI Experiment Plugin - Frame Capture Camera
 
-#include "MRIExperiment.h"
-#include "Sensor/MRIFrameCaptureCamera.h"
-
+#include "MRIFrameCaptureCamera.h"
 #include "Components/DrawFrustumComponent.h"
 #include "Components/SceneCaptureComponent2D.h"
 #include "Components/StaticMeshComponent.h"

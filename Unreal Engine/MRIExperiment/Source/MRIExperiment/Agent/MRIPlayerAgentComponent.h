@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Agent/MRIAgentComponent.h"
+#include "MRIAgentComponent.h"
 #include "MRIPlayerAgentComponent.generated.h"
 
 /**

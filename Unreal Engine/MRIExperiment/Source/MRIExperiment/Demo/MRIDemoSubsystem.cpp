@@ -1,8 +1,7 @@
 // Copyright (c) Gallant Lab. All Rights Reserved.
 // Demo/replay management subsystem extracted from UCarlaGameInstance.
 
-#include "MRIExperiment.h"
-#include "Demo/MRIDemoSubsystem.h"
+#include "MRIDemoSubsystem.h"
 
 #include "NullNetworkReplayStreaming.h"
 #include "HAL/FileManager.h"
@@ -210,9 +209,9 @@ void UMRIDemoSubsystem::DemoRenderFrames(const FString& demoName, int fps)
 	if (pawn)
 	{
 		AWorldSettings* worldSettings = pawn->GetWorldSettings();
-		if (worldSettings && pawn->PlayerState)
+		if (worldSettings && pawn->GetPlayerState())
 		{
-			worldSettings->Pauser = pawn->PlayerState;
+			worldSettings->SetPauserPlayerState(pawn->GetPlayerState());
 		}
 	}
 }

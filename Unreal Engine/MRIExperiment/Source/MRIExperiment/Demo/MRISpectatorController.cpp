@@ -1,7 +1,7 @@
 // Copyright (c) Gallant Lab. All Rights Reserved.
 
-#include "MRIExperiment.h"
-#include "Demo/MRISpectatorController.h"
+#include "MRISpectatorController.h"
+
 #include "Demo/MRIDemoSubsystem.h"
 #include "State/MRISubjectState.h"
 #include "Agent/MRIAgentComponent.h"
@@ -73,13 +73,13 @@ void AMRISpectatorController::PostActorCreated()
 			if (!PlayerState)
 			{
 				UE_LOG(LogMRI, Log, TEXT("No player state. Using the reference pawn's."));
-				if (referencePawn && referencePawn->PlayerState)
-					PlayerState = referencePawn->PlayerState;
+				if (referencePawn && referencePawn->GetPlayerState())
+					PlayerState = referencePawn->GetPlayerState();
 				else
 					UE_LOG(LogMRI, Log, TEXT("Reference pawn does not have a player state either. TTLs will not be read out."));
 			}
-			if (!worldSettings->Pauser)
-				worldSettings->Pauser = PlayerState;
+			if (!worldSettings->GetPauserPlayerState())
+				worldSettings->SetPauserPlayerState(PlayerState);
 			demoNetDriver = GetWorld()->GetDemoNetDriver();
 
 			captureFrames = true;
@@ -146,7 +146,7 @@ void AMRISpectatorController::TrySetViewTargetToPlayer()
 	UE_LOG(LogMRI, Log, TEXT("Player pawn is %s"), *playerPawn->GetName());
 	this->AttachToActor(playerPawn, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	this->referencePawn = playerPawn;
-	this->referencePlayerState = Cast<AMRISubjectState>(referencePawn->PlayerState);
+	this->referencePlayerState = Cast<AMRISubjectState>(referencePawn->GetPlayerState());
 	if (!referencePlayerState)
 		UE_LOG(LogMRI, Log, TEXT("Reference pawn player state is a null pointer"));
 	UE_LOG(LogMRI, Log, TEXT("View target set to %s"), *playerPawn->GetName());
@@ -196,21 +196,21 @@ void AMRISpectatorController::Tick(float deltaTime)
 	{
 		if (delay > 0)
 		{
-			if (!worldSettings->Pauser)
-				worldSettings->Pauser = PlayerState;
+			if (!worldSettings->GetPauserPlayerState())
+				worldSettings->SetPauserPlayerState(PlayerState);
 			delay -= deltaTime;
 
-			if (referencePawn && referencePawn->PlayerState)
+			if (referencePawn && referencePawn->GetPlayerState())
 			{
 				UE_LOG(LogMRI, Log, TEXT("Player state found during initial ticks"));
-				referencePlayerState = Cast<AMRISubjectState>(referencePawn->PlayerState);
+				referencePlayerState = Cast<AMRISubjectState>(referencePawn->GetPlayerState());
 			}
 		}
 		else
 		{
-			if (worldSettings->Pauser)
+			if (worldSettings->GetPauserPlayerState())
 			{
-				worldSettings->Pauser = nullptr;
+				worldSettings->SetPauserPlayerState(nullptr);
 				UE_LOG(LogMRI, Log, TEXT("Begin rendering frames"));
 				frameNumber = 0;
 			}
@@ -380,7 +380,7 @@ void AMRISpectatorController::LogExperimentState()
 }
 
 
-void AMRISpectatorController::SetReferencePawn(APawn* referencePawn)
+void AMRISpectatorController::SetReferencePawn(APawn* newReferencePawn)
 {
-	this->referencePawn = referencePawn;
+	this->referencePawn = newReferencePawn;
 }

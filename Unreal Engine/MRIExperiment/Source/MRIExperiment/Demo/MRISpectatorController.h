@@ -5,10 +5,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "Sensor/MRIFrameCaptureCamera.h"
-#include "Logging/MRIExperimentState.h"
-#include "Logging/MRILoggerComponent.h"
-#include "Settings/MRISettings.h"
+#include "MRIFrameCaptureCamera.h"
+#include "MRIExperimentState.h"
+#include "MRILoggerComponent.h"
+#include "MRISettings.h"
 
 #include "MRISpectatorController.generated.h"
 
@@ -47,9 +47,9 @@ public:
 
 	/**
 	 * Sets the reference pawn to follow, i.e. the player's pawn.
-	 * @param referencePawn  The pawn to follow and record data from.
+	 * @param newReferencePawn  The pawn to follow and record data from.
 	 */
-	void SetReferencePawn(APawn* referencePawn);
+	void SetReferencePawn(APawn* newReferencePawn);
 
 	/**
 	 * Called after the actor is created in the world. Locates the demo subsystem

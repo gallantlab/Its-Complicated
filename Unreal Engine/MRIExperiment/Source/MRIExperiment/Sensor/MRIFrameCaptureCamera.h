@@ -9,7 +9,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Sensor/MRIPostProcessEffect.h"
+#include "MRIPostProcessEffect.h"
 #include "MRIFrameCaptureCamera.generated.h"
 
 class UTextureRenderTarget2D;

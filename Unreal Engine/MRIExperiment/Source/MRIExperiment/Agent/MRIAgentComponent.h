@@ -8,7 +8,7 @@
 #pragma once
 
 #include "Components/SceneComponent.h"
-#include "Agent/MRIAgentComponentVisitor.h"
+#include "MRIAgentComponentVisitor.h"
 #include "MRIAgentComponent.generated.h"
 
 /**

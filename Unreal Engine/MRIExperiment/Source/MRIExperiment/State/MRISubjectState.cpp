@@ -1,7 +1,6 @@
 // Copyright (c) Gallant Lab. All Rights Reserved.
 
-#include "MRIExperiment.h"
-#include "State/MRISubjectState.h"
+#include "MRISubjectState.h"
 
 #include "Net/UnrealNetwork.h"
 
@@ -55,10 +54,10 @@ void AMRISubjectState::CopyProperties(APlayerState *playerState)
 	subjectState->displayedPromptType = displayedPromptType;
 }
 
-void AMRISubjectState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &outLifetimeProps) const
+void AMRISubjectState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
 {
 	// Call DOREPLIFETIME for each variable that you eventually want to know about
-	Super::GetLifetimeReplicatedProps(outLifetimeProps);
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMRISubjectState, Transform);
 	DOREPLIFETIME(AMRISubjectState, TTL);

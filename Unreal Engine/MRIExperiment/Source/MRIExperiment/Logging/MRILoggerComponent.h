@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "State/MRISubjectState.h"
 #include "MRILoggerComponent.generated.h"
 
 class AMRISpectatorController;
+class AMRISubjectState;
 
 /**
  * Base actor component that collects per-frame experiment state during demo playback.

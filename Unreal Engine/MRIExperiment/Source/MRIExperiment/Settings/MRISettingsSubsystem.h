@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MRISettings.h"
 #include "Subsystems/GameInstanceSubsystem.h"
-#include "Settings/MRISettings.h"
 
 #include "MRISettingsSubsystem.generated.h"
 

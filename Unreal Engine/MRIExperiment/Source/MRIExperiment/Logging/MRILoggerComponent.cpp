@@ -1,7 +1,6 @@
 // MRI Experiment Plugin - Base Logger Component
 
-#include "MRIExperiment.h"
-#include "Logging/MRILoggerComponent.h"
+#include "MRILoggerComponent.h"
 #include "Demo/MRISpectatorController.h"
 
 UMRILoggerComponent::UMRILoggerComponent()

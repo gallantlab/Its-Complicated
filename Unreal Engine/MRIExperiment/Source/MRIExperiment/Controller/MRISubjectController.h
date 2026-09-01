@@ -5,7 +5,7 @@
 #include "MRIExperiment.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "State/MRISubjectState.h"
+#include "MRISubjectState.h"
 
 #include "MRISubjectController.generated.h"
 
@@ -107,7 +107,7 @@ public:
 	 * Subclasses must implement this to drive their experiment state machine.
 	 * @param deltaTime  Time elapsed since the last frame in seconds.
 	 */
-	virtual void ExperimentTick(float deltaTime) = 0;
+	virtual void ExperimentTick(float deltaTime) {}
 
 	/**
 	 * Called on the on the TTL keydown event.

@@ -1,3 +1,4 @@
+using System.IO;
 using UnrealBuildTool;
 
 public class MRIExperiment : ModuleRules
@@ -5,6 +6,20 @@ public class MRIExperiment : ModuleRules
 	public MRIExperiment(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+
+		PublicIncludePaths.AddRange(
+			new string[]
+			{
+				ModuleDirectory,
+				Path.Combine(ModuleDirectory, "Agent"),
+				Path.Combine(ModuleDirectory, "Controller"),
+				Path.Combine(ModuleDirectory, "Demo"),
+				Path.Combine(ModuleDirectory, "Logging"),
+				Path.Combine(ModuleDirectory, "Sensor"),
+				Path.Combine(ModuleDirectory, "Settings"),
+				Path.Combine(ModuleDirectory, "State")
+			}
+		);
 
 		PublicDependencyModuleNames.AddRange(
 			new string[]
@@ -26,6 +41,7 @@ public class MRIExperiment : ModuleRules
 				"RenderCore",
 				"RHI",
 				"ImageWrapper",
+				"Json",
 				"NullNetworkReplayStreaming"
 			}
 		);

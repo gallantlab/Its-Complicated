@@ -69,14 +69,14 @@ public:
 	  * or it won't be replicated and you can't read it back out later!
 	 * @param outLifetimeProps  Output array to populate with replication rules.
 	 */
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &outLifetimeProps) const override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const override;
 
 	/**
 	 * Returns the current simulation frame number.
 	 * @return Monotonically increasing frame counter.
 	 */
 	UFUNCTION(BlueprintCallable)
-	uint64 GetFrameNumber() const
+	int64 GetFrameNumber() const
 	{
 		return FrameNumber;
 	}
@@ -136,7 +136,7 @@ public:
 	 * @return Const reference to the replicated Transform.
 	 */
 	UFUNCTION(BlueprintCallable)
-	const FTransform &GetTransform() const
+	const FTransform &GetSubjectTransform() const
 	{
 		return Transform;
 	}
@@ -197,7 +197,7 @@ private:
 
 	/** Monotonically increasing simulation frame counter. */
 	UPROPERTY(VisibleAnywhere)
-	uint64 FrameNumber;
+	int64 FrameNumber;
 
 	/** Duration of the last simulation step in seconds. */
 	UPROPERTY(VisibleAnywhere)

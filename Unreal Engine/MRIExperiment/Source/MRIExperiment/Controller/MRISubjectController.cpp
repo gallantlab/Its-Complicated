@@ -1,7 +1,7 @@
 // Copyright (c) Gallant Lab. All Rights Reserved.
 
-#include "MRIExperiment.h"
-#include "Controller/MRISubjectController.h"
+#include "MRISubjectController.h"
+
 #include "Settings/MRISettingsSubsystem.h"
 #include "Demo/MRIDemoSubsystem.h"
 

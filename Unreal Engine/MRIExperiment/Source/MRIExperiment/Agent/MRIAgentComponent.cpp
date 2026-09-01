@@ -1,7 +1,6 @@
 // MRI Experiment Plugin - Base Agent Component
 
-#include "MRIExperiment.h"
-#include "Agent/MRIAgentComponent.h"
+#include "MRIAgentComponent.h"
 
 UMRIAgentComponent::UMRIAgentComponent(const FObjectInitializer &ObjectInitializer)
 	: Super(ObjectInitializer)

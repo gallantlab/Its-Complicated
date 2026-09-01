@@ -1,7 +1,6 @@
 // Copyright (c) Gallant Lab. All Rights Reserved.
 
-#include "MRIExperiment.h"
-#include "Settings/MRISettings.h"
+#include "MRISettings.h"
 
 #include "Misc/ConfigCacheIni.h"
 #include "Misc/CommandLine.h"

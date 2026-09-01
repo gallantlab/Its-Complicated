@@ -1,5 +1,4 @@
-#include "MRIExperiment.h"
-#include "Logging/MRIExperimentState.h"
+#include "MRIExperimentState.h"
 
 using namespace std;
 
