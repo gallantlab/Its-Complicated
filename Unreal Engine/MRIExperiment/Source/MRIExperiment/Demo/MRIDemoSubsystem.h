@@ -381,21 +381,21 @@ private:
 	/** Network replay streamer used for enumerating available replays. */
 	TSharedPtr<INetworkReplayStreamer> EnumerateStreamsPtr;
 	/** Delegate bound to the replay enumeration completion callback. */
-	FOnEnumerateStreamsComplete OnEnumerateStreamsCompleteDelegate;
+	FEnumerateStreamsCallback OnEnumerateStreamsCompleteDelegate;
 	/**
 	 * Callback invoked when replay enumeration completes.
-	 * Converts the raw stream info list into FReplayInfo structs and fires BP_OnFindReplaysComplete.
-	 * @param StreamInfos  Array of replay stream metadata returned by the streamer.
+	 * Converts the found streams into FReplayInfo structs and fires BP_OnFindReplaysComplete.
+	 * @param Result  Enumeration result holding the found replay streams.
 	 */
-	void OnEnumerateStreamsComplete(const TArray<FNetworkReplayStreamInfo>& StreamInfos);
+	void OnEnumerateStreamsComplete(const FEnumerateStreamsResult& Result);
 
 	/** Delegate bound to the replay deletion completion callback. */
-	FOnDeleteFinishedStreamComplete OnDeleteFinishedStreamCompleteDelegate;
+	FDeleteFinishedStreamCallback OnDeleteFinishedStreamCompleteDelegate;
 	/**
 	 * Callback invoked when a replay deletion operation completes.
-	 * @param bDeleteSucceeded  true if the replay was deleted successfully.
+	 * @param Result  Deletion result.
 	 */
-	void OnDeleteFinishedStreamComplete(const bool bDeleteSucceeded);
+	void OnDeleteFinishedStreamComplete(const FDeleteFinishedStreamResult& Result);
 
 	/** Cached pointer to the player pawn, updated on demand. */
 	APawn* playerPawn = nullptr;

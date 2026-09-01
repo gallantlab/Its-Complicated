@@ -30,10 +30,10 @@ void UMRIDemoSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 	EnumerateStreamsPtr = FNetworkReplayStreaming::Get().GetFactory().CreateReplayStreamer();
 
 	// Link FindReplays() delegate
-	OnEnumerateStreamsCompleteDelegate = FOnEnumerateStreamsComplete::CreateUObject(this, &UMRIDemoSubsystem::OnEnumerateStreamsComplete);
+	OnEnumerateStreamsCompleteDelegate = FEnumerateStreamsCallback::CreateUObject(this, &UMRIDemoSubsystem::OnEnumerateStreamsComplete);
 
 	// Link DeleteReplay() delegate
-	OnDeleteFinishedStreamCompleteDelegate = FOnDeleteFinishedStreamComplete::CreateUObject(this, &UMRIDemoSubsystem::OnDeleteFinishedStreamComplete);
+	OnDeleteFinishedStreamCompleteDelegate = FDeleteFinishedStreamCallback::CreateUObject(this, &UMRIDemoSubsystem::OnDeleteFinishedStreamComplete);
 
 	UE_LOG(LogMRI, Log, TEXT("MRIDemoSubsystem initialized"));
 }
@@ -236,11 +236,11 @@ void UMRIDemoSubsystem::FindReplays()
 {
 	if (bIsDemosListStale && EnumerateStreamsPtr.Get())
 	{
-		EnumerateStreamsPtr.Get()->EnumerateStreams(FNetworkReplayVersion(), FString(), FString(), OnEnumerateStreamsCompleteDelegate);
+		EnumerateStreamsPtr.Get()->EnumerateStreams(FNetworkReplayVersion(), INDEX_NONE, FString(), TArray<FString>(), OnEnumerateStreamsCompleteDelegate);
 	}
 }
 
-void UMRIDemoSubsystem::OnEnumerateStreamsComplete(const TArray<FNetworkReplayStreamInfo>& StreamInfos)
+void UMRIDemoSubsystem::OnEnumerateStreamsComplete(const FEnumerateStreamsResult& Result)
 {
 	IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
 
@@ -252,7 +252,7 @@ void UMRIDemoSubsystem::OnEnumerateStreamsComplete(const TArray<FNetworkReplaySt
 
 	FString savedFileName;
 
-	for (FNetworkReplayStreamInfo streamInfo : StreamInfos)
+	for (FNetworkReplayStreamInfo streamInfo : Result.FoundStreams)
 	{
 		if (!streamInfo.bIsLive)
 		{
@@ -328,7 +328,7 @@ void UMRIDemoSubsystem::DeleteReplay(const FString& ReplayName)
 	}
 }
 
-void UMRIDemoSubsystem::OnDeleteFinishedStreamComplete(const bool bDeleteSucceeded)
+void UMRIDemoSubsystem::OnDeleteFinishedStreamComplete(const FDeleteFinishedStreamResult& Result)
 {
 	FindReplays();
 }
