@@ -35,7 +35,7 @@ struct EntityState
 	 * @param type      Semantic type of the entity (subject, NPC, etc.).
 	 * @param ID        Unique identifier for the entity component instance.
 	 */
-	EntityState(FVector position, FRotator rotation, EntityType type, uint32 ID)
+	EntityState(FVector position, FRotator rotation, EEntityType type, uint32 ID)
 		: position(position),
 		  rotation(rotation),
 		  type(type),
@@ -48,7 +48,7 @@ struct EntityState
 	/** World-space rotation of the entity at the time of capture. */
 	FRotator rotation;
 	/** Semantic entity type (e.g. player, NPC). */
-	EntityType type;
+	EEntityType type;
 	/** Unique hash-based ID of the agent component instance. */
 	uint32 ID;
 };
@@ -188,7 +188,7 @@ private:
 	/** Zero-based replay rendering frame index. */
 	int frame;
 	/** Entity type of the primary tracked actor for this frame. */
-	EntityType thisType;
+	EEntityType thisType;
 	/** Per-agent position/rotation/type snapshots for this frame. */
 	TArray<EntityState> entityStates;
 
