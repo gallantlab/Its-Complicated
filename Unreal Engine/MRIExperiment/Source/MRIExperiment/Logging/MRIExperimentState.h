@@ -127,12 +127,6 @@ public:
 	EDisplayedPromptType GetDisplayedPromptType() const { return displayedPromptType; }
 
 	/**
-	 * Returns whether a synchronization beep was playing during this frame.
-	 * @return true if a beep event was active.
-	 */
-	bool IsBeep() const { return isBeep; }
-
-	/**
 	 * Returns the subject's accumulated points at the time of this frame.
 	 * @return Integer points total.
 	 */
@@ -203,8 +197,6 @@ private:
 
 	/** Total TTLs received up to this frame. */
 	int totalTTLs = 0;
-	/** True if a synchronization beep was active during this frame. */
-	bool isBeep;
 	/** Subject's accumulated points at the time of this frame. */
 	int points = 0;
 	/** Type of prompt displayed during this frame. */

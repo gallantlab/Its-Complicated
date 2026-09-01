@@ -7,7 +7,6 @@ MRIExperimentState::MRIExperimentState(double time)
 	: time(time),
 	  frame(-1),
 	  isTTL(false),
-	  isBeep(false),
 	  points(0)
 {
 	entityStates = TArray<EntityState>();
@@ -17,7 +16,6 @@ MRIExperimentState::MRIExperimentState(double time, int frame)
 	: time(time),
 	  frame(frame),
 	  isTTL(false),
-	  isBeep(false),
 	  points(0)
 {
 	entityStates = TArray<EntityState>();
@@ -34,7 +32,6 @@ MRIExperimentState::MRIExperimentState(double time, int frame, TArray<const UMRI
 {
 	totalTTLs = playerState->GetTotalTTLs();
 	displayedPromptType = playerState->GetDisplayedPromptType();
-	isBeep = playerState->IsBeep();
 	points = playerState->GetPoints();
 }
 
@@ -70,7 +67,6 @@ void MRIExperimentState::WriteToFile(ofstream& logFile, int& indentation)
 		<< MRI_WRITE_ATTRIBUTE_KV("Time", time)
 		<< MRI_WRITE_ATTRIBUTE_KV("TTL", isTTL)
 		<< MRI_WRITE_ATTRIBUTE_KV("TotalTTL", totalTTLs)
-		<< MRI_WRITE_ATTRIBUTE_KV("Beep", isBeep)
 		<< MRI_WRITE_ATTRIBUTE_KV("Points", points)
 		<< ">" << endl;
 
