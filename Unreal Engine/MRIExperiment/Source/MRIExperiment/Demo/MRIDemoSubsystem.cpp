@@ -4,15 +4,14 @@
 #include "MRIExperiment.h"
 #include "Demo/MRIDemoSubsystem.h"
 
-#include "Runtime/NetworkReplayStreaming/NullNetworkReplayStreaming/Public/NullNetworkReplayStreaming.h"
-#include "Runtime/Core/Public/HAL/FileManager.h"
+#include "NullNetworkReplayStreaming.h"
+#include "HAL/FileManager.h"
 #include "Misc/FileHelper.h"
-#include "NetworkVersion.h"
+#include "Misc/NetworkVersion.h"
 #include "Misc/Paths.h"
-#include "HAL/PlatformFilemanager.h"
+#include "HAL/PlatformFileManager.h"
 
 #include "EngineUtils.h"
-#include "GameFramework/PlayerStart.h"
 
 // ---------------------------------------------------------------------------
 // Lifecycle
