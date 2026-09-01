@@ -9,7 +9,7 @@
 #include <fstream>
 
 #ifndef MRI_WRITE_INDENTS
-#define MRI_WRITE_INDENTS(out, indents) for (int indent = 0; indent < indents; indent++) out << '\t';
+#define MRI_WRITE_INDENTS(out, indents) do { for (int indentIndex = 0; indentIndex < (indents); indentIndex++) (out) << '\t'; } while (0)
 #endif
 
 #ifndef MRI_WRITE_ATTRIBUTE

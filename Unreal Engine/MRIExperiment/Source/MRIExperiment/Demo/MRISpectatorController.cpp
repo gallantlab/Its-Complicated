@@ -297,17 +297,17 @@ void AMRISpectatorController::SaveExperimentLog()
 	logFile << "<Experiment>" << endl;
 	indentation++;
 
-	MRI_WRITE_INDENTS(logFile, indentation)
+	MRI_WRITE_INDENTS(logFile, indentation);
 	logFile << MRI_WRITE_SINGLE_TAG("Experiment-Type",
 		TCHAR_TO_ANSI(*UExperimentType::ToString(experimentType))) << endl;
 
-	MRI_WRITE_INDENTS(logFile, indentation)
+	MRI_WRITE_INDENTS(logFile, indentation);
 	logFile << MRI_WRITE_SINGLE_TAG("Player-ID", playerAgentID) << endl;
 
-	MRI_WRITE_INDENTS(logFile, indentation)
+	MRI_WRITE_INDENTS(logFile, indentation);
 	logFile << MRI_WRITE_SINGLE_TAG("Capture-FPS", demoSubsystem->GetCaptureFPS()) << endl;
 
-	MRI_WRITE_INDENTS(logFile, indentation)
+	MRI_WRITE_INDENTS(logFile, indentation);
 	logFile << MRI_WRITE_SINGLE_TAG("Seconds-To-Run-Start", referencePlayerState->GetSecondsToStartOfRun()) << endl;
 
 	// Per-frame states
