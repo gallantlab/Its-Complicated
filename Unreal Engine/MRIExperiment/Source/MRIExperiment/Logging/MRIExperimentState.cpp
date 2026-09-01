@@ -91,11 +91,6 @@ void MRIExperimentState::WriteContents(ofstream& stream, int& indent)
 
 	for (int i = 0; i < entityStates.Num(); i++)
 	{
-		if (entityStates[i].type == RoadSign)
-		{
-			continue;
-		}
-
 		MRI_WRITE_INDENTS(stream, indent);
 		stream << "<Entity"
 			<< MRI_WRITE_ATTRIBUTE_KV("Type", entityStates[i].type)
