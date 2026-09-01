@@ -45,7 +45,7 @@ DECLARE_DELEGATE_OneParam(FSetTimeRemainingDelegate, int);
  * Handles TTL pulse tracking, experiment lifecycle, demo recording management,
  * eyetracking calibration triggers, and display text for prompts and feedback.
  */
-UCLASS()
+UCLASS(Abstract)
 class MRIEXPERIMENT_API AMRISubjectController : public APlayerController
 {
 	GENERATED_BODY()
