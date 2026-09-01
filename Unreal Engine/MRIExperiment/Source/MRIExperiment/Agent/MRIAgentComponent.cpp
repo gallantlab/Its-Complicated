@@ -9,7 +9,7 @@ UMRIAgentComponent::UMRIAgentComponent(const FObjectInitializer &ObjectInitializ
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
-void UMRIAgentComponent::AcceptVisitor(IMRIAgentComponentVisitor &Visitor)
+void UMRIAgentComponent::AcceptVisitor(IMRIAgentComponentVisitor &Visitor) const
 {
 	Visitor.Visit(*this);
 }
