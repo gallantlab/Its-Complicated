@@ -60,14 +60,14 @@ void AMRISubjectController::BeginPlay()
 }
 
 
-void AMRISubjectController::Possess(APawn* pawn)
+void AMRISubjectController::OnPossess(APawn* pawn)
 {
-	Super::Possess(pawn);
+	Super::OnPossess(pawn);
 	subjectState = Cast<AMRISubjectState>(PlayerState);
 	check(subjectState != nullptr);
-	subjectState->NetUpdateFrequency = 30;
-	subjectState->MinNetUpdateFrequency = 30;
-	pawn->Tags.Add(PlayerTag);
+	subjectState->SetNetUpdateFrequency(30);
+	subjectState->SetMinNetUpdateFrequency(30);
+	pawn->Tags.Add(MRIPlayerTag);
 }
 
 

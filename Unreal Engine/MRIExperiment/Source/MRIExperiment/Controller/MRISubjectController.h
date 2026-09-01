@@ -74,11 +74,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	/**
-	 * Called when this controller pstarts to possess a pawn. Caches a typed reference to
+	 * Called when this controller starts to possess a pawn. Caches a typed reference to
 	 * the AMRISubjectState and configures the net update frequency for replication.
 	 * @param pawn  The pawn being possessed.
 	 */
-	virtual void Possess(APawn* pawn) override;
+	virtual void OnPossess(APawn* pawn) override;
 
 	/**
 	 * Marks eyetracking as ended (state 2). Call this from Blueprint when the
