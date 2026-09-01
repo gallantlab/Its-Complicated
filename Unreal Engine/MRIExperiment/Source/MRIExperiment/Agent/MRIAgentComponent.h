@@ -15,9 +15,10 @@
  * Abstract base component for all MRI experiment agents (subject pawn, NPCs, etc.).
  *
  * Attach subclasses of this component to any Actor that should be tracked and
- * visited by the logging system. During BeginPlay, the component registers
- * itself with the agent registry (if bRegisterAgentComponent is true), and
- * during EndPlay it deregisters itself automatically.
+ * visited by the logging system. During BeginPlay, the component marks itself as
+ * registered (if bRegisterAgentComponent is true), and during EndPlay it clears
+ * the mark. The spectator controller enumerates registered agent components in
+ * the world each replay tick.
  *
  * Use AcceptVisitor to let a visitor (e.g. MRIExperimentState) read out the
  * current state information for this agent each frame.
@@ -52,7 +53,16 @@ public:
 	 * that visitors can distinguish between different agent component types.
 	 * @param Visitor  The visitor object that will read state from this component.
 	 */
-	virtual void AcceptVisitor(IMRIAgentComponentVisitor &Visitor);
+	virtual void AcceptVisitor(IMRIAgentComponentVisitor &Visitor) const;
+
+	/**
+	 * Returns whether this component is currently marked for inclusion in state logging.
+	 * @return true if the component registered itself on BeginPlay and has not ended play.
+	 */
+	bool IsAgentRegistered() const
+	{
+		return bAgentComponentIsRegistered;
+	}
 
 protected:
 
