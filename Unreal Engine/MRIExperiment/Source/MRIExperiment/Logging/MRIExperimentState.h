@@ -140,10 +140,19 @@ public:
 
 	/**
 	 * Called by UMRIAgentComponent::AcceptVisitor to record this agent's state.
-	 * Appends a new EntityState entry for the visited component.
+	 * Fallback implementation: records the entity as Unknown and logs an error.
+	 * Override in your experiment's state subclass for each agent component type you handle.
 	 * @param agent  The agent component being visited.
 	 */
 	virtual void Visit(const UMRIAgentComponent& agent) override;
+
+	/**
+	 * Called by UMRIPlayerAgentComponent::AcceptVisitor. Fallback implementation:
+	 * records the entity as Unknown and logs an error. Override in your experiment's
+	 * state subclass to record the entity as EEntityType::Player.
+	 * @param agent  The player agent component being visited.
+	 */
+	virtual void Visit(const UMRIPlayerAgentComponent& agent) override;
 
 	/**
 	 * Returns the EntityState at the given index.
