@@ -11,6 +11,7 @@
 #include "Engine/World.h"
 #include "EngineUtils.h"
 #include "GameFramework/WorldSettings.h"
+#include "HAL/PlatformFileManager.h"
 
 #include <iostream>
 #include <fstream>
@@ -79,7 +80,7 @@ void AMRISpectatorController::PostActorCreated()
 			}
 			if (!worldSettings->Pauser)
 				worldSettings->Pauser = PlayerState;
-			demoNetDriver = GetWorld()->DemoNetDriver;
+			demoNetDriver = GetWorld()->GetDemoNetDriver();
 
 			captureFrames = true;
 		}
@@ -220,14 +221,14 @@ void AMRISpectatorController::Tick(float deltaTime)
 			}
 			else
 			{
-				UE_LOG(LogMRI, Log, TEXT("Time %f, dt %f, no player state available"), demoNetDriver->DemoCurrentTime, deltaTime);
+				UE_LOG(LogMRI, Log, TEXT("Time %f, dt %f, no player state available"), demoNetDriver->GetDemoCurrentTime(), deltaTime);
 			}
 
 			CaptureSensors();
 			if (referencePlayerState)
 				LogExperimentState();
 
-			if (currentTime == demoNetDriver->DemoCurrentTime)
+			if (currentTime == demoNetDriver->GetDemoCurrentTime())
 			{
 				captureFrames = false;
 				FixTimeStep(false);
@@ -239,7 +240,7 @@ void AMRISpectatorController::Tick(float deltaTime)
 			}
 			else
 			{
-				currentTime = demoNetDriver->DemoCurrentTime;
+				currentTime = demoNetDriver->GetDemoCurrentTime();
 			}
 
 			frameNumber++;
@@ -253,6 +254,28 @@ void AMRISpectatorController::Tick(float deltaTime)
 	}
 
 	Super::Tick(deltaTime);
+}
+
+
+double AMRISpectatorController::GetDemoCurrentTime() const
+{
+	return demoNetDriver ? demoNetDriver->GetDemoCurrentTime() : 0.0;
+}
+
+
+TArray<const UMRIAgentComponent*> AMRISpectatorController::GetAgents() const
+{
+	TArray<const UMRIAgentComponent*> agents;
+	for (TActorIterator<AActor> actorIterator(GetWorld()); actorIterator; ++actorIterator)
+	{
+		actorIterator->ForEachComponent<UMRIAgentComponent>(false,
+			[&agents](const UMRIAgentComponent* component)
+			{
+				if (component->IsAgentRegistered())
+					agents.Add(component);
+			});
+	}
+	return agents;
 }
 
 

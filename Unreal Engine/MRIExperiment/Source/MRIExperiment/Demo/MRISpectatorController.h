@@ -8,11 +8,13 @@
 #include "Sensor/MRIFrameCaptureCamera.h"
 #include "Logging/MRIExperimentState.h"
 #include "Logging/MRILoggerComponent.h"
+#include "Settings/MRISettings.h"
 
 #include "MRISpectatorController.generated.h"
 
 class UMRIDemoSubsystem;
 class AMRISubjectState;
+class UDemoNetDriver;
 
 /**
  * Player controller used during demo playback to follow the subject and capture data.
@@ -116,6 +118,20 @@ public:
 	{
 		return demoNetDriver;
 	}
+
+	/**
+	 * Returns the current playback time of the replay.
+	 * @return Demo time in seconds, or 0 if no demo net driver is active.
+	 */
+	double GetDemoCurrentTime() const;
+
+	/**
+	 * Collects all registered agent components in the world.
+	 * Iterates every actor and gathers agent components whose
+	 * bRegisterAgentComponent opt-in flag left them registered.
+	 * @return Array of registered agent components to visit for state logging.
+	 */
+	TArray<const UMRIAgentComponent*> GetAgents() const;
 
 	/**
 	 * Returns the UMRIDemoSubsystem for this session.
