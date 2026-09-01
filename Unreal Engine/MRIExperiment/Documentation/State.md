@@ -6,7 +6,7 @@
 
 `AMRISubjectState` inherits from `APlayerState` and stores everything about the subject thatyou eventually want to read out for your experiment. During live gameplay, the controller writes into these properties each tick, and because they are all marked `UPROPERTY(Replicated)`, the demo net driver captures them. During replay, the spectator controller reads them back out through the getter methods.
 
-The replicated properties cover the subject's transform and motion,  MRI synchronization (TTL state, total TTL count, beep marker, seconds to start of run), experiment state (points, displayed prompt type, whether under player control, auto-steer status), and timing metadata (frame number, timestamps). You then need to extend all those classes to record whatever is relevant for you.
+The replicated properties cover the subject's transform, MRI synchronization (TTL state, total TTL count, seconds to start of run), and experiment state (points, displayed prompt type). Timing metadata (frame number, timestamps) is not replicated; the controller updates it each tick. You then need to extend all those classes to record whatever is relevant for you.
 
 The class declares `AMRISubjectController` as a friend so the controller can write directly to the private properties without needing setters for every field.
 

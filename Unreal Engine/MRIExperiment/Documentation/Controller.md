@@ -10,7 +10,7 @@ The controller's main job is managing the experiment lifecycle around the scanne
 
 The controller also provides a display text system. Call `SetDisplayText()` with a string, duration, prompt type, and color, and the controller will fire delegates that a UI widget can bind to. It automatically clears the text after the duration expires and calls `OnEndDisplayText()`.
 
-On `BeginPlay`, the controller reads settings from `UMRIDemoSubsystem::GetSettings()` to configure auto-trigger, auto-stop, eyetracking, TTL count, and resolution. It accesses the demo subsystem via `UGameInstance::GetSubsystem<UMRIDemoSubsystem>()`.
+On `BeginPlay`, the controller gets the settings subsystem via `UGameInstance::GetSubsystem<UMRISettingsSubsystem>()`, reads its `UMRISettings` to configure auto-trigger, auto-stop, eyetracking, TTL count, and resolution, and passes the settings to the demo subsystem via `ReadSettings()`.
 
 ## How to Use
 

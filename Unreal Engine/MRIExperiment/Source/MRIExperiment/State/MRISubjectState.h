@@ -29,7 +29,7 @@ enum class EDisplayedPromptType : uint8
  *
  * This is the central state object for the MRI experiment framework. All information that
  * must be available to both the live game and the spectator replay controller (e.g. position,
- * TTL state, score, beep events) should be stored here as UPROPERTY(Replicated) fields.
+ * TTL state, score) should be stored here as UPROPERTY(Replicated) fields.
  *
  * Access is restricted to AMRISubjectController via friend declaration to enforce
  * that state mutations always go through the controller's logic.

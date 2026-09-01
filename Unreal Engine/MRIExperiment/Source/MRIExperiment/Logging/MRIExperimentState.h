@@ -57,7 +57,7 @@ struct EntityState
  * A single-frame snapshot of all experiment state, collected during demo playback.
  *
  * Each instance records the simulation time, frame number, all agent component positions
- * and rotations, and the subject's replicated player state (TTL, points, beep, etc.).
+ * and rotations, and the subject's replicated player state (TTL, points, etc.).
  * Implements IMRIAgentComponentVisitor so that agent components can push their data in.
  *
  * After collection, call WriteToFile() to serialize the frame as XML-style log output.
