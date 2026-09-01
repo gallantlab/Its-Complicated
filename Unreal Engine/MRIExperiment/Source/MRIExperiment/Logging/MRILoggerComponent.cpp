@@ -7,7 +7,7 @@
 UMRILoggerComponent::UMRILoggerComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
-	UE_LOG(LogTemp, Log, TEXT("MRILoggerComponent spawned"));
+	UE_LOG(LogMRI, Log, TEXT("MRILoggerComponent spawned"));
 }
 
 void UMRILoggerComponent::SetParentController(AMRISpectatorController* parent)
