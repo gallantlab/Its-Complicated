@@ -252,7 +252,7 @@ void UMRIDemoSubsystem::OnEnumerateStreamsComplete(const FEnumerateStreamsResult
 		{
 			UE_LOG(LogMRI, Log, TEXT("Replay %s"), *(streamInfo.Name));
 			savedFileName = platformFile.ConvertToAbsolutePathForExternalAppForWrite(
-				*FPaths::Combine(FPaths::ProjectSavedDir(), FString::Printf(TEXT("%s-positions.xml"), *(streamInfo.Name))));
+				*FPaths::Combine(FPaths::ProjectSavedDir(), FString::Printf(TEXT("%s-log.xml"), *(streamInfo.Name))));
 
 			if (FPaths::FileExists(savedFileName))
 			{
