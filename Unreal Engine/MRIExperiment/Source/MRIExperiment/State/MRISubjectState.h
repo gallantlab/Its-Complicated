@@ -132,16 +132,6 @@ public:
 	}
 
 	/**
-	 * Returns whether a synchronization beep is currently playing.
-	 * @return true if the PlayBeep flag is set.
-	 */
-	UFUNCTION(BlueprintCallable)
-	bool IsBeep() const
-	{
-		return PlayBeep;
-	}
-
-	/**
 	 * Returns the subject's current world transform (position + rotation + scale).
 	 * @return Const reference to the replicated Transform.
 	 */
@@ -232,10 +222,6 @@ private:
 	/** Total number of TTLs received since the start of the experiment */
 	UPROPERTY(Replicated)
 	int TotalTTLs = 0;
-
-	/** True while the synchronization beep is playing, */
-	UPROPERTY(Replicated)
-	bool PlayBeep = false;
 
 	/** Seconds elapsed from demo start to the first TTL of this run */
 	UPROPERTY(Replicated)

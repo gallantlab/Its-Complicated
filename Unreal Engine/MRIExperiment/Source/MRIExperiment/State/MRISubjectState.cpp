@@ -14,7 +14,6 @@ AMRISubjectState::AMRISubjectState()
 	Transform = FTransform::Identity;
 	TTL = false;
 	TotalTTLs = 0;
-	PlayBeep = false;
 	secondsToStartOfRun = 0.0f;
 	Points = 0;
 	displayedPromptType = EDisplayedPromptType::None;
@@ -25,7 +24,6 @@ void AMRISubjectState::Reset()
 	Super::Reset();
 	TTL = false;
 	TotalTTLs = 0;
-	PlayBeep = false;
 	Points = 0;
 	displayedPromptType = EDisplayedPromptType::None;
 }
@@ -52,7 +50,6 @@ void AMRISubjectState::CopyProperties(APlayerState *playerState)
 	subjectState->Transform = Transform;
 	subjectState->TTL = TTL;
 	subjectState->TotalTTLs = TotalTTLs;
-	subjectState->PlayBeep = PlayBeep;
 	subjectState->secondsToStartOfRun = secondsToStartOfRun;
 	subjectState->Points = Points;
 	subjectState->displayedPromptType = displayedPromptType;
@@ -66,7 +63,6 @@ void AMRISubjectState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &out
 	DOREPLIFETIME(AMRISubjectState, Transform);
 	DOREPLIFETIME(AMRISubjectState, TTL);
 	DOREPLIFETIME(AMRISubjectState, TotalTTLs);
-	DOREPLIFETIME(AMRISubjectState, PlayBeep);
 	DOREPLIFETIME(AMRISubjectState, secondsToStartOfRun);
 	DOREPLIFETIME(AMRISubjectState, Points);
 	DOREPLIFETIME(AMRISubjectState, displayedPromptType);
