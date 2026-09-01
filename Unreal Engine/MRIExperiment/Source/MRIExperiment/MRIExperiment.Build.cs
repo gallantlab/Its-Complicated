@@ -4,6 +4,8 @@ public class MRIExperiment : ModuleRules
 {
 	public MRIExperiment(ReadOnlyTargetRules Target) : base(Target)
 	{
+		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
+
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
@@ -11,9 +13,8 @@ public class MRIExperiment : ModuleRules
 				"CoreUObject",
 				"Engine",
 				"InputCore",
-				"RenderCore",
-				"RHI",
-				"Json"
+				"NetworkReplayStreaming",
+				"UMG"
 			}
 		);
 
@@ -22,9 +23,10 @@ public class MRIExperiment : ModuleRules
 			{
 				"Slate",
 				"SlateCore",
-				"UMG",
-				"MoviePlayer",
-				"Landscape"
+				"RenderCore",
+				"RHI",
+				"ImageWrapper",
+				"NullNetworkReplayStreaming"
 			}
 		);
 	}

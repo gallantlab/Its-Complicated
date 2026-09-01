@@ -8,7 +8,7 @@
 	"CreatedBy": "Gallant Lab",
 	"CanContainContent": true,
 	"IsBetaVersion": false,
-	"Installed": true,
+	"EngineVersion": "5.8.0",
 	"Modules": [
 		{
 			"Name": "MRIExperiment",
