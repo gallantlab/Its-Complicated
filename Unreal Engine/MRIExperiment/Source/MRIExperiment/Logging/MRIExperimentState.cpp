@@ -93,7 +93,7 @@ void MRIExperimentState::WriteContents(ofstream& stream, int& indent)
 	{
 		MRI_WRITE_INDENTS(stream, indent);
 		stream << "<Entity"
-			<< MRI_WRITE_ATTRIBUTE_KV("Type", entityStates[i].type)
+			<< MRI_WRITE_ATTRIBUTE_KV("Type", (int)entityStates[i].type)
 			<< MRI_WRITE_ATTRIBUTE_KV("ID", entityStates[i].ID)
 			<< ">" << endl;
 
