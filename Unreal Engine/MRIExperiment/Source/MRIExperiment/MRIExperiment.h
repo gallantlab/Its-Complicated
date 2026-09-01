@@ -3,9 +3,8 @@
 
 #pragma once
 
-#include "ModuleManager.h"
-#include "Runtime/UMG/Public/UMG.h"
-#include "Runtime/UMG/Public/Blueprint/UserWidget.h"
+#include "CoreMinimal.h"
+#include "Modules/ModuleManager.h"
 
 /** Log category for all MRI Experiment plugin messages. */
 DECLARE_LOG_CATEGORY_EXTERN(LogMRI, Log, All);
@@ -38,7 +37,11 @@ public:
 	virtual void ShutdownModule() override;
 };
 
-/** Actor tag used to identify the subject (player) pawn in the world. */
-static FName PlayerTag = FName(TEXT("Player"));
+/**
+ * Actor tag used to identify the subject (player) pawn in the world.
+ * AMRISubjectController tags its pawn with this on possession; the demo subsystem
+ * and spectator controller search for it during replay.
+ */
+static const FLazyName MRIPlayerTag(TEXT("Player"));
 /** Actor tag used to identify NPC (non-player character) pawns in the world. */
-static FName NPCTag = FName(TEXT("NPC"));
+static const FLazyName MRINPCTag(TEXT("NPC"));
