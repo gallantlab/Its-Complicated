@@ -7,7 +7,25 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
+
 class UMRIAgentComponent;
+class UMRIPlayerAgentComponent;
+
+/**
+ * Semantic type of a tracked entity, written to the per-frame XML log.
+ *
+ * The plugin defines the player entry. Extend this enum with the entity types your
+ * experiment tracks, add a UMRIAgentComponent subclass for each, and implement the
+ * corresponding Visit() overload in your MRIExperimentState subclass.
+ */
+enum class EEntityType : uint8
+{
+	/** Entity whose agent component type was not recognized by any typed Visit() overload. */
+	Unknown = 0,
+	/** The subject's (player's) pawn. */
+	Player,
+};
 
 /**
  * Visitor interface for reading state from MRI agent components.
@@ -19,12 +37,21 @@ class UMRIAgentComponent;
 class IMRIAgentComponentVisitor
 {
 public:
+	virtual ~IMRIAgentComponentVisitor() = default;
+
 	/**
 	 * Reads relevant state information from the given agent component.
 	 *
-	 * Called by UMRIAgentComponent::AcceptVisitor. Subclasses of UMRIAgentComponent
-	 * should override AcceptVisitor to call typed Visit overloads so we record appropriate info
+	 * Called by UMRIAgentComponent::AcceptVisitor for agent component types that have
+	 * no typed Visit overload. Subclasses of UMRIAgentComponent should override
+	 * AcceptVisitor to call typed Visit overloads so we record appropriate info.
 	 * @param agent  The agent component whose state should be recorded.
 	 */
-	virtual void Visit(const UMRIAgentComponent &) = 0;
+	virtual void Visit(const UMRIAgentComponent& agent) = 0;
+
+	/**
+	 * Reads state from the subject's player agent component.
+	 * @param agent  The player agent component whose state should be recorded.
+	 */
+	virtual void Visit(const UMRIPlayerAgentComponent& agent) = 0;
 };
