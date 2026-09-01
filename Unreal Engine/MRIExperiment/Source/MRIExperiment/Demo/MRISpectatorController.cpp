@@ -57,6 +57,11 @@ void AMRISpectatorController::PostActorCreated()
 
 		if (demoSubsystem->CaptureFrames())
 		{
+			if (!demoSubsystem->GetCaptureFolder())
+			{
+				UE_LOG(LogMRI, Error, TEXT("Frame capture requested but no capture folder is set. Frames will not be captured."));
+				return;
+			}
 			SetFrameCaptureFolder(*(demoSubsystem->GetCaptureFolder()));
 			fps = demoSubsystem->GetCaptureFPS();
 			currentTime = -1.0;
@@ -280,6 +285,12 @@ TArray<const UMRIAgentComponent*> AMRISpectatorController::GetAgents() const
 void AMRISpectatorController::SaveExperimentLog()
 {
 #define FORMAT_TO_CHAR_ARRAY(string, ...) TCHAR_TO_ANSI(*FString::Printf(TEXT(string), ##__VA_ARGS__))
+
+	if (!demoSubsystem->GetDemoName())
+	{
+		UE_LOG(LogMRI, Error, TEXT("No demo name is set. The experiment log will not be saved."));
+		return;
+	}
 
 	IPlatformFile& platformFile = FPlatformFileManager::Get().GetPlatformFile();
 	FString fileName = platformFile.ConvertToAbsolutePathForExternalAppForWrite(

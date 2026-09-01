@@ -144,7 +144,10 @@ void AMRISubjectController::TTLdown()
 	if (!demoSubsystem)
 		FindDemoSubsystem();
 	if (!demoSubsystem)
+	{
 		UE_LOG(LogMRI, Error, TEXT("Demo subsystem finding for TTL down failed"));
+		return;
+	}
 
 	FTimespan elapsed = FDateTime::Now() - demoSubsystem->demoStartTime;
 	UE_LOG(LogMRI, Log, TEXT("%02d:%02d:%02d.%03d since demo start"), elapsed.GetHours(), elapsed.GetMinutes(), elapsed.GetSeconds(), elapsed.GetFractionMilli());
