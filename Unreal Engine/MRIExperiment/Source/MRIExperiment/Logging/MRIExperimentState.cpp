@@ -45,7 +45,7 @@ void MRIExperimentState::RecordStates(TArray<const UMRIAgentComponent*> agents)
 		agents[i]->AcceptVisitor(*this);
 		FVector position = agents[i]->GetComponentLocation();
 		FRotator rotation = agents[i]->GetComponentRotation();
-		uint32 agentID = agents[i]->GetAgentID();
+		uint32 agentID = agents[i]->GetId();
 		entityStates.Add(EntityState(position, rotation, thisType, agentID));
 	}
 }
