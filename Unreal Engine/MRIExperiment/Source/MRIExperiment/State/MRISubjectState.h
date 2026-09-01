@@ -122,6 +122,16 @@ public:
 	}
 
 	/**
+	 * Returns the total number of TTLs received since the start of the experiment.
+	 * @return Cumulative TTL count.
+	 */
+	UFUNCTION(BlueprintCallable)
+	int GetTotalTTLs() const
+	{
+		return TotalTTLs;
+	}
+
+	/**
 	 * Returns whether a synchronization beep is currently playing.
 	 * @return true if the PlayBeep flag is set.
 	 */
