@@ -229,9 +229,11 @@ protected:
 	bool FindDemoSubsystem();
 
 	/** Cached pointer to the demo recording subsystem. May be null before BeginPlay. */
+	UPROPERTY()
 	UMRIDemoSubsystem* demoSubsystem = nullptr;
 
 	/** Cached pointer to the settings subsystem. Set during BeginPlay. */
+	UPROPERTY()
 	UMRISettingsSubsystem* settingsSubsystem = nullptr;
 
 	/**

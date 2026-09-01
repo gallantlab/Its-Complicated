@@ -28,7 +28,6 @@ AMRISpectatorController::AMRISpectatorController(const FObjectInitializer& objec
 	PrimaryActorTick.bTickEvenWhenPaused = true;
 	bShouldPerformFullTickWhenPaused = true;
 
-	sensors = new TArray<AMRIFrameCaptureCamera*>();
 	captureFrames = false;
 	frameNumber = 0;
 	playerAgentID = -1;
@@ -39,6 +38,8 @@ AMRISpectatorController::AMRISpectatorController(const FObjectInitializer& objec
 
 AMRISpectatorController::~AMRISpectatorController()
 {
+	for (int i = 0; i < frameStates.Num(); i++)
+		delete frameStates[i];
 }
 
 
@@ -156,17 +157,19 @@ void AMRISpectatorController::TrySetViewTargetToPlayer()
 	{
 		// Sensor creation is project-specific. This base class initializes an empty
 		// sensor list. Projects should override or extend to add their own sensors.
-		if (sensors->Num() > 0)
-			sensors->Empty();
+		if (sensors.Num() > 0)
+			sensors.Empty();
 		UE_LOG(LogMRI, Log, TEXT("Sensor list initialized. Projects should add experiment-specific sensors."));
 
-		frameStates = new TArray<MRIExperimentState*>();
+		for (int i = 0; i < frameStates.Num(); i++)
+			delete frameStates[i];
+		frameStates.Empty();
 	}
 
-	TArray<AActor*>* attachedActors = new TArray<AActor*>();
-	playerPawn->GetAttachedActors(*attachedActors);
-	for (int i = 0; i < attachedActors->Num(); i++)
-		UE_LOG(LogMRI, Log, TEXT("Found attached actor %s"), *(*attachedActors)[i]->GetName());
+	TArray<AActor*> attachedActors;
+	playerPawn->GetAttachedActors(attachedActors);
+	for (int i = 0; i < attachedActors.Num(); i++)
+		UE_LOG(LogMRI, Log, TEXT("Found attached actor %s"), *attachedActors[i]->GetName());
 
 	CaptureSensors();
 }
@@ -174,19 +177,14 @@ void AMRISpectatorController::TrySetViewTargetToPlayer()
 
 void AMRISpectatorController::CaptureSensors()
 {
-	if (sensors == nullptr)
-	{
-		UE_LOG(LogMRI, Error, TEXT("Null sensors list"));
-		return;
-	}
-	for (int i = 0; i < sensors->Num(); i++)
-		(*sensors)[i]->SaveNextFrame();
+	for (int i = 0; i < sensors.Num(); i++)
+		sensors[i]->SaveNextFrame();
 }
 
 
 void AMRISpectatorController::AddExperimentState(MRIExperimentState* state)
 {
-	frameStates->Add(state);
+	frameStates.Add(state);
 }
 
 
@@ -311,18 +309,18 @@ void AMRISpectatorController::SaveExperimentLog()
 	logFile << MRI_WRITE_SINGLE_TAG("Seconds-To-Run-Start", referencePlayerState->GetSecondsToStartOfRun()) << endl;
 
 	// Per-frame states
-	if (frameStates)
+	if (frameStates.Num() > 0)
 	{
-		UE_LOG(LogMRI, Log, TEXT("%d frames to save"), frameStates->Num());
-		int percentStep = frameStates->Num() / 100;
+		UE_LOG(LogMRI, Log, TEXT("%d frames to save"), frameStates.Num());
+		int percentStep = frameStates.Num() / 100;
 		percentStep = percentStep ? percentStep : 1;
 
-		for (int frame = 0; frame < frameStates->Num(); frame++)
+		for (int frame = 0; frame < frameStates.Num(); frame++)
 		{
-			(*frameStates)[frame]->WriteToFile(logFile, indentation);
+			frameStates[frame]->WriteToFile(logFile, indentation);
 
 			if (frame % percentStep == 0)
-				UE_LOG(LogMRI, Log, TEXT("%d/%d frames written"), frame + 1, frameStates->Num() + 1);
+				UE_LOG(LogMRI, Log, TEXT("%d/%d frames written"), frame + 1, frameStates.Num() + 1);
 		}
 	}
 
@@ -338,13 +336,8 @@ void AMRISpectatorController::SaveExperimentLog()
 
 void AMRISpectatorController::SetFrameCaptureFolder(const FString& folder)
 {
-	if (sensors == nullptr)
-	{
-		UE_LOG(LogMRI, Error, TEXT("Tried to set frame capture folder but the sensor list is null"));
-		return;
-	}
-	for (int i = 0; i < sensors->Num(); i++)
-		(*sensors)[i]->SetSaveFolder(folder);
+	for (int i = 0; i < sensors.Num(); i++)
+		sensors[i]->SetSaveFolder(folder);
 }
 
 
