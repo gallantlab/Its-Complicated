@@ -23,8 +23,8 @@ EExperimentType UExperimentType::FromString(const FString &String)
 {
 	if (String == TEXT("Other"))                    return EExperimentType::Other;
 
-	UE_LOG(LogMRI, Warning, TEXT("Unknown experiment type string \"%s\", defaulting to Navigation."), *String);
-	return EExperimentType::Navigation;
+	UE_LOG(LogMRI, Warning, TEXT("Unknown experiment type string \"%s\", defaulting to Other."), *String);
+	return EExperimentType::Other;
 }
 
 FString UExperimentType::ToString(EExperimentType ExperimentType)
