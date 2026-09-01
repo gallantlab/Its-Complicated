@@ -191,7 +191,7 @@ private:
 	/** Zero-based replay rendering frame index. */
 	int frame;
 	/** Entity type of the primary tracked actor for this frame. */
-	EEntityType thisType;
+	EEntityType thisType = EEntityType::Unknown;
 	/** Per-agent position/rotation/type snapshots for this frame. */
 	TArray<EntityState> entityStates;
 
@@ -200,5 +200,5 @@ private:
 	/** Subject's accumulated points at the time of this frame. */
 	int points = 0;
 	/** Type of prompt displayed during this frame. */
-	EDisplayedPromptType displayedPromptType;
+	EDisplayedPromptType displayedPromptType = EDisplayedPromptType::None;
 };

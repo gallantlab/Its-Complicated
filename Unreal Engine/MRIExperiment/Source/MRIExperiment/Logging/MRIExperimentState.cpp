@@ -3,18 +3,18 @@
 using namespace std;
 
 MRIExperimentState::MRIExperimentState(double time)
-	: time(time),
+	: isTTL(false),
+	  time(time),
 	  frame(-1),
-	  isTTL(false),
 	  points(0)
 {
 	entityStates = TArray<EntityState>();
 }
 
 MRIExperimentState::MRIExperimentState(double time, int frame)
-	: time(time),
+	: isTTL(false),
+	  time(time),
 	  frame(frame),
-	  isTTL(false),
 	  points(0)
 {
 	entityStates = TArray<EntityState>();
