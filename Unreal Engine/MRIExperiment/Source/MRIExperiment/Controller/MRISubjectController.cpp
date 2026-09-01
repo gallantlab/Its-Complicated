@@ -5,10 +5,7 @@
 #include "Settings/MRISettings.h"
 #include "Demo/MRIDemoSubsystem.h"
 
-#include "Kismet/GameplayStatics.h"
-#include "Sound/SoundCue.h"
 #include "Engine/World.h"
-#include "TimerManager.h"
 #include "EngineUtils.h"
 
 #define BOOL_TO_TEXT(x) x ? TEXT("yes") : TEXT("no")
@@ -19,11 +16,6 @@ AMRISubjectController::AMRISubjectController(const FObjectInitializer& ObjectIni
 {
 	randomStream = FRandomStream();
 	PrimaryActorTick.bCanEverTick = true;
-
-	// Find the beep sound cue
-	static ConstructorHelpers::FObjectFinder<USoundCue> beepCueFinder(TEXT("/Game/Sounds/440Hz_Cue"));
-	beepCue = beepCueFinder.Object;
-	UE_LOG(LogMRI, Log, TEXT("440Hz beep pointer is%s valid"), beepCue->IsValidLowLevelFast() ? TEXT("") : TEXT(" not"));
 }
 
 
@@ -136,10 +128,6 @@ void AMRISubjectController::SetupInputComponent()
 		// TTL info
 		InputComponent->BindAction("TTL", IE_Pressed, this, &AMRISubjectController::TTLdown);
 		InputComponent->BindAction("TTL", IE_Released, this, &AMRISubjectController::TTLup);
-
-		// Beep info - ephys
-		InputComponent->BindAction("PlayBeep", IE_Pressed, this, &AMRISubjectController::PlayBeep);
-		InputComponent->BindAction("PlayBeep", IE_Released, this, &AMRISubjectController::TTLup);
 	}
 }
 
@@ -208,19 +196,6 @@ void AMRISubjectController::TTLup()
 bool AMRISubjectController::isTTL() const
 {
 	return subjectState->isTTL();
-}
-
-
-void AMRISubjectController::PlayBeep()
-{
-	if (beepCue)
-	{
-		UE_LOG(LogMRI, Log, TEXT("Playing beep"));
-		UGameplayStatics::PlaySound2D(GetWorld(), beepCue);
-		subjectState->PlayBeep = true;
-		GetWorld()->GetTimerManager().SetTimer(beepTimer, this, &AMRISubjectController::OnBeepEnd, 0.5, false);
-		TTLdown();	// also include the TTL marker for this
-	}
 }
 
 

@@ -11,7 +11,6 @@
 
 class UMRIDemoSubsystem;
 class UMRISettings;
-class USoundCue;
 
 /** Empty string constant used as a default value for display text */
 const FString EMPTY_STRING = FString("");
@@ -199,12 +198,6 @@ protected:
 	virtual void SetupInputComponent() override;
 
 	/**
-	 * Plays the 440 Hz synchronization beep sound and records the beep event in
-	 * subject state. Also triggers a TTLdown to easy parsing of the log.
-	 */
-	void PlayBeep();
-
-	/**
 	 * Records the timestamp (in seconds since demo start) at which the first TTL
 	 * of this run was received.
 	 * @param seconds  Elapsed seconds from demo start to the first TTL.
@@ -214,15 +207,6 @@ protected:
 
 	/** True if no TTL has been received yet for the current run. */
 	bool isFirstTTLInRun = true;
-
-	/** Timer handle for clearing the beep flag in subject state after playback ends. */
-	FTimerHandle beepTimer;
-
-	/** Clears the PlayBeep flag in subject state when the beep sound finishes. */
-	void OnBeepEnd()
-	{
-		subjectState->PlayBeep = false;
-	}
 
 	/** Resets the subject's accumulated points to zero. */
 	void ResetPoints()
@@ -302,7 +286,4 @@ private:
 	bool autoRender = false;
 	/** Seconds remaining before the next automatic render is triggered. */
 	double secondsUntilRenderNext = 10;
-
-	/** Sound cue played for auditory synchronization in electrophysiology experiments. */
-	USoundCue* beepCue;
 };
