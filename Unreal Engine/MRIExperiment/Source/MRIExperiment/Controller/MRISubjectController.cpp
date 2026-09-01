@@ -2,7 +2,7 @@
 
 #include "MRIExperiment.h"
 #include "Controller/MRISubjectController.h"
-#include "Settings/MRISettings.h"
+#include "Settings/MRISettingsSubsystem.h"
 #include "Demo/MRIDemoSubsystem.h"
 
 #include "Engine/World.h"
@@ -26,7 +26,9 @@ void AMRISubjectController::BeginPlay()
 	FindDemoSubsystem();
 	bShowMouseCursor = false;
 
-	UMRISettings& settings = demoSubsystem->GetSettings();
+	settingsSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UMRISettingsSubsystem>();
+	UMRISettings& settings = settingsSubsystem->GetSettings();
+	demoSubsystem->ReadSettings(&settings);
 
 	TTLsToExperimentStart = settings.TTLsBeforeExperimentStart;
 
@@ -41,10 +43,10 @@ void AMRISubjectController::BeginPlay()
 	autoStopDemoLimit = settings.SecondsToDemoStop;
 	bAutoStopDemo = autoStopDemoLimit > 0;
 
-	if (!demoSubsystem->HasResolutionBeenSet())
+	if (!settingsSubsystem->HasResolutionBeenSet())
 	{
 		ConsoleCommand(*FString("r.setRes ").Append(settings.Resolution));
-		demoSubsystem->UpdateResolutionHasBeenSet();
+		settingsSubsystem->UpdateResolutionHasBeenSet();
 	}
 
 	// If auto-rendering has been specified, force subsystem to enumerate replays
@@ -252,7 +254,7 @@ void AMRISubjectController::ResetExperimentState()
 	timeSinceDemoStart = 0.0;
 	eyetrackingState = autoEyetrack ? 0 : 2;
 	isFirstTTLInRun = true;
-	TTLsToExperimentStart = demoSubsystem->GetSettings().TTLsBeforeExperimentStart;
+	TTLsToExperimentStart = settingsSubsystem->GetSettings().TTLsBeforeExperimentStart;
 	secondsWithoutTTL = 0;
 	subjectState->ResetExperimentState();
 }

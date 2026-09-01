@@ -69,7 +69,7 @@ public:
  * overridden via command-line arguments or by calling LoadSettingsFromFile.
  * Exposes all configurable parameters to Blueprints for runtime inspection.
  */
-UCLASS(BlueprintType, Blueprintable, config = Game, defaultconfig)
+UCLASS(BlueprintType, Blueprintable)
 class MRIEXPERIMENT_API UMRISettings : public UObject
 {
 	GENERATED_BODY()

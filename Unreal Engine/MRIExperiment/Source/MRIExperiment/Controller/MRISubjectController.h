@@ -11,6 +11,7 @@
 
 class UMRIDemoSubsystem;
 class UMRISettings;
+class UMRISettingsSubsystem;
 
 /** Empty string constant used as a default value for display text */
 const FString EMPTY_STRING = FString("");
@@ -229,6 +230,9 @@ protected:
 
 	/** Cached pointer to the demo recording subsystem. May be null before BeginPlay. */
 	UMRIDemoSubsystem* demoSubsystem = nullptr;
+
+	/** Cached pointer to the settings subsystem. Set during BeginPlay. */
+	UMRISettingsSubsystem* settingsSubsystem = nullptr;
 
 	/**
 	 * Returns the cached demo subsystem, re-querying it if the cache is stale.
