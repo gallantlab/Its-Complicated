@@ -14,6 +14,7 @@
 #include "MRIDemoSubsystem.generated.h"
 
 class UMRISettings;
+enum class EExperimentType : uint8;
 
 /**
  * Blueprint-accessible struct describing a single replay recording.
@@ -108,10 +109,18 @@ public:
 
 	/**
 	 * Reads relevant settings from the settings object
-	 * 
+	 *
 	 * @param settings pointer to loaded settings object
 	 */
 	void ReadSettings(UMRISettings* settings);
+
+	/**
+	 * Marks replay playback as ended. Called by the spectator controller when the replay finishes.
+	 */
+	void OnReplayEnded()
+	{
+		isReplay = false;
+	}
 
 	// ------------------------------------------------------------------
 	// Replay state queries

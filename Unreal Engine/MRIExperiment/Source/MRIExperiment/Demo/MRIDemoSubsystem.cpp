@@ -40,11 +40,6 @@ void UMRIDemoSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 void UMRIDemoSubsystem::Deinitialize()
 {
-	if (!isReplay)
-	{
-		SaveSubjectStateFile();
-	}
-
 	Super::Deinitialize();
 }
 

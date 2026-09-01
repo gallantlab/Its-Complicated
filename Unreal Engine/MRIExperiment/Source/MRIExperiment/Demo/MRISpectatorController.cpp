@@ -234,7 +234,7 @@ void AMRISpectatorController::Tick(float deltaTime)
 				if (referencePlayerState)
 					SaveExperimentLog();
 				UE_LOG(LogMRI, Log, TEXT("End replay and end rendering frames"));
-				demoSubsystem->isReplay = false;
+				demoSubsystem->OnReplayEnded();
 				stopDemo = true;
 			}
 			else
