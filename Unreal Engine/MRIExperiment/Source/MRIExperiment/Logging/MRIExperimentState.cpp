@@ -20,15 +20,9 @@ MRIExperimentState::MRIExperimentState(double time, int frame)
 	entityStates = TArray<EntityState>();
 }
 
-MRIExperimentState::MRIExperimentState(double time, int frame, TArray<const UMRIAgentComponent*> agents)
-	: MRIExperimentState(time, frame)
+void MRIExperimentState::Record(TArray<const UMRIAgentComponent*> agents, AMRISubjectState* playerState)
 {
 	RecordStates(agents);
-}
-
-MRIExperimentState::MRIExperimentState(double time, int frame, TArray<const UMRIAgentComponent*> agents, AMRISubjectState* playerState)
-	: MRIExperimentState(time, frame, agents)
-{
 	totalTTLs = playerState->GetTotalTTLs();
 	displayedPromptType = playerState->GetDisplayedPromptType();
 	points = playerState->GetPoints();

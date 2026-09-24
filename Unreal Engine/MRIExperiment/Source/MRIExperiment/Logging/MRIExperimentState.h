@@ -80,21 +80,14 @@ public:
 	MRIExperimentState(double time, int frame);
 
 	/**
-	 * Constructs a state snapshot and immediately records states for all given agents.
-	 * @param time    Simulation time in seconds.
-	 * @param frame   Zero-based replay frame index.
-	 * @param agents  Array of agent components to visit and record.
-	 */
-	MRIExperimentState(double time, int frame, TArray<const UMRIAgentComponent*> agents);
-
-	/**
-	 * Constructs a state snapshot with agent states and subject player state.
-	 * @param time         Simulation time in seconds.
-	 * @param frame        Zero-based replay frame index.
+	 * Records the full frame into this snapshot: visits every agent and copies the
+	 * subject's TTL count, points, and displayed prompt type.
+	 * Call it from your subclass constructor body: at that point the object is fully
+	 * constructed as your subclass, so your Visit() overrides are the ones that run.
 	 * @param agents       Array of agent components to visit and record.
 	 * @param playerState  The subject's replicated player state.
 	 */
-	MRIExperimentState(double time, int frame, TArray<const UMRIAgentComponent*> agents, AMRISubjectState* playerState);
+	void Record(TArray<const UMRIAgentComponent*> agents, AMRISubjectState* playerState);
 
 	/**
 	 * Visits all agent components in the given array and records their states.
