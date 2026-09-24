@@ -194,7 +194,7 @@ protected:
 		sensors.Add(sensor);
 	}
 
-private:
+protected:
 
 	/** The subject pawn being followed during replay. */
 	UPROPERTY()

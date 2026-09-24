@@ -184,8 +184,6 @@ protected:
 	 */
 	virtual void WriteContents(std::ofstream& stream, int& indent);
 
-private:
-
 	/** Simulation time in seconds at which this frame was captured. */
 	double time;
 	/** Zero-based replay rendering frame index. */
