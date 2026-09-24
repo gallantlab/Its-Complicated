@@ -160,11 +160,12 @@ void AMRISpectatorController::TrySetViewTargetToPlayer()
 
 	if (demoSubsystem->IsPlayingReplay())
 	{
-		// Sensor creation is project-specific. This base class initializes an empty
-		// sensor list. Projects should override or extend to add their own sensors.
+		// Sensor creation is project-specific. Subclasses override CreateSensors()
+		// and register each camera with AddSensor().
 		if (sensors.Num() > 0)
 			sensors.Empty();
-		UE_LOG(LogMRI, Log, TEXT("Sensor list initialized. Projects should add experiment-specific sensors."));
+		CreateSensors();
+		UE_LOG(LogMRI, Log, TEXT("Sensor list initialized with %d sensors."), sensors.Num());
 
 		for (int i = 0; i < frameStates.Num(); i++)
 			delete frameStates[i];

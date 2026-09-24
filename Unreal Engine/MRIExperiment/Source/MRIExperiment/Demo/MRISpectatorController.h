@@ -176,6 +176,24 @@ protected:
 	 */
 	virtual void SpawnLoggerComponent();
 
+	/**
+	 * Override point for creating frame-capture camera sensors. Called once the
+	 * reference pawn is known, before the capture folder is applied.
+	 * Register each created camera with AddSensor().
+	 * The base implementation creates no sensors.
+	 */
+	virtual void CreateSensors() {}
+
+	/**
+	 * Registers a frame-capture camera with the capture pipeline, so it receives
+	 * SetSaveFolder() and SaveNextFrame() calls.
+	 * @param sensor  The camera to register.
+	 */
+	void AddSensor(AMRIFrameCaptureCamera* sensor)
+	{
+		sensors.Add(sensor);
+	}
+
 private:
 
 	/** The subject pawn being followed during replay. */
