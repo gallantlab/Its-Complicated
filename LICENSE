@@ -26,3 +26,24 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---------------------------------------------------------------------------
+
+Third-party content exceptions
+
+The BSD 3-Clause License above applies to this repository except as noted
+below.
+
+The Example project is derived from Epic Games' Third Person sample template.
+The template code and all Epic-provided content in Example/ (including the
+mannequin characters, animations, and level prototyping assets in
+Example/Content) are copyright Epic Games, Inc. and are governed by the
+Unreal Engine End User License Agreement (https://www.unrealengine.com/eula),
+not by the BSD license. Under that agreement, this content may only be used
+with, and distributed as part of, an Unreal Engine project.
+
+Portions of the Experiment plugin (the frame capture cameras, the agent
+component system, and the settings system) are adapted from the CARLA
+simulator, copyright (c) 2017 Computer Vision Center (CVC) at the Universitat
+Autonoma de Barcelona (UAB), licensed under the MIT License. The affected
+files carry their own notices.
