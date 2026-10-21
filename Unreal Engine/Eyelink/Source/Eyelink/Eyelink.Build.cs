@@ -25,14 +25,14 @@ public class Eyelink : ModuleRules
 			);
 
 		// Eyelink
-		if ((Target.Platform == UnrealTargetPlatform.Win64) || (Target.Platform == UnrealTargetPlatform.Win32))
+		if (Target.Platform == UnrealTargetPlatform.Win64)
 		{
 			PublicIncludePaths.Add("D:\\Program Files (x86)\\SR Research\\EyeLink\\Includes\\eyelink");
 
 			string[] DllFiles = Directory.GetFiles("D:\\Program Files (x86)\\SR Research\\EyeLink\\libs\\x64", "*.dll");
 			foreach (string Dll in DllFiles)
 			{
-				RuntimeDependencies.Add(new RuntimeDependency(Dll));
+				RuntimeDependencies.Add(Dll);
 			}
 			string[] LibraryFiles = Directory.GetFiles("D:\\Program Files (x86)\\SR Research\\EyeLink\\libs\\x64", "*.lib");
 			PublicAdditionalLibraries.AddRange(LibraryFiles);
@@ -41,7 +41,7 @@ public class Eyelink : ModuleRules
 		{
 			PublicIncludePaths.Add("/usr/include/EyeLink/");
 
-			RuntimeDependencies.Add(new RuntimeDependency("/usr/lib/x86_64-linux-gnu/libeyelink_core.so"));
+			RuntimeDependencies.Add("/usr/lib/x86_64-linux-gnu/libeyelink_core.so");
 			PublicAdditionalLibraries.Add("/usr/lib/x86_64-linux-gnu/libeyelink_core.so");
 		}
 
