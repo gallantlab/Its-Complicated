@@ -334,8 +334,14 @@ void AExperimentSpectatorController::Tick(float deltaTime)
 			frameNumber++;
 		}
 	}
-	else if (stopDemo)
+	if (stopDemo && !levelReloadRequested)
 	{
+		// The travel takes a frame or more; run this only once, or the next
+		// tick calls StopDemo() on the destroyed driver.
+		levelReloadRequested = true;
+		// The fixed time step is engine-global and would survive into the
+		// reloaded gameplay world.
+		FixTimeStep(false);
 		demoNetDriver->StopDemo();
 		GetWorld()->DestroyDemoNetDriver();
 		RestartLevel();

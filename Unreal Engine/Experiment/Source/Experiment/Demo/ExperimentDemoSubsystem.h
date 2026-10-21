@@ -115,11 +115,28 @@ public:
 	void ReadSettings(UExperimentSettings* settings);
 
 	/**
-	 * Marks replay playback as ended. Called by the spectator controller when the replay finishes.
+	 * Marks replay playback as ended and returns all replay and recording state
+	 * to its initial values, so the reloaded gameplay world starts clean: a later
+	 * watched replay does not re-enter the frame-capture path, auto demo
+	 * recording can trigger again, and pawn lookups do not go through the dead
+	 * replay pawn's cached name. Called by the spectator controller when the
+	 * replay finishes.
 	 */
 	void OnReplayEnded()
 	{
 		isReplay = false;
+		isRecording = false;
+		demoStatus = 0;
+		spectatorToCaptureFrames = false;
+		captureFPS = 0;
+		delete captureFolder;
+		captureFolder = nullptr;
+		delete demoFileName;
+		demoFileName = nullptr;
+		delete playerPawnName;
+		playerPawnName = nullptr;
+		playerPawn = nullptr;
+		bIsDemosListStale = true;
 	}
 
 	// ------------------------------------------------------------------

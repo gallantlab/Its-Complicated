@@ -344,4 +344,7 @@ protected:
 
 	/** True when the replay has finished and this controller should be destroyed. */
 	bool stopDemo = false;
+
+	/** True once the end-of-replay level reload has been requested, so it only runs once. */
+	bool levelReloadRequested = false;
 };
