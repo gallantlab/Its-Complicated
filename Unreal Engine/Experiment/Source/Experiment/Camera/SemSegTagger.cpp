@@ -21,6 +21,16 @@ void USemSegTagger::SetLabelMap(const TMap<TSubclassOf<AActor>, uint8>& newLabel
 	labelMap = newLabelMap;
 }
 
+void USemSegTagger::SetTagLabelMap(const TMap<FName, uint8>& newTagLabelMap)
+{
+	tagLabelMap = newTagLabelMap;
+}
+
+void USemSegTagger::SetDefaultLabel(uint8 newDefaultLabel)
+{
+	defaultLabel = newDefaultLabel;
+}
+
 void USemSegTagger::TagActorsInLevel(UWorld& world) const
 {
 	for (TActorIterator<AActor> it(&world); it; ++it)
@@ -44,8 +54,14 @@ void USemSegTagger::TagActor(AActor& actor) const
 
 uint8 USemSegTagger::GetLabel(const AActor& actor) const
 {
+	for (const TPair<FName, uint8>& entry : tagLabelMap)
+	{
+		if (actor.ActorHasTag(entry.Key))
+			return entry.Value;
+	}
+
 	const UClass* bestMatch = nullptr;
-	uint8 bestLabel = 0;
+	uint8 bestLabel = defaultLabel;
 
 	for (const TPair<TSubclassOf<AActor>, uint8>& entry : labelMap)
 	{

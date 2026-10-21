@@ -238,6 +238,13 @@ protected:
 	virtual void AttachCamera(AExperimentFrameCaptureCamera* camera);
 
 	/**
+	 * Override to fill semanticLabels, semanticTagLabels, and
+	 * defaultSemanticLabel. Called right before the level is tagged, when a
+	 * created camera uses the SemanticSegmentation effect.
+	 */
+	virtual void ConfigureSemanticLabels() {}
+
+	/**
 	 * Registers a camera with the capture pipeline, so it receives
 	 * SetSaveFolder() and SaveNextFrame() calls.
 	 * @param camera  The camera to register.
@@ -279,6 +286,17 @@ protected:
 	 *  created camera uses the SemanticSegmentation effect. */
 	UPROPERTY(EditAnywhere, Category = "Experiment|Cameras")
 	TMap<TSubclassOf<AActor>, uint8> semanticLabels;
+
+	/** Actor tag to stencil label map for semantic segmentation.
+	 *  A tag entry overrides the class map, so it singles out individual
+	 *  level actors, such as a sky sphere. */
+	UPROPERTY(EditAnywhere, Category = "Experiment|Cameras")
+	TMap<FName, uint8> semanticTagLabels;
+
+	/** Semantic label for actors that match no semanticLabels entry.
+	 *  0 leaves them untagged, which renders black. */
+	UPROPERTY(EditAnywhere, Category = "Experiment|Cameras")
+	uint8 defaultSemanticLabel = 0;
 
 	/** Tagger that writes the semantic labels into the custom depth stencil.
 	 *  Created only when a semantic segmentation camera exists. */

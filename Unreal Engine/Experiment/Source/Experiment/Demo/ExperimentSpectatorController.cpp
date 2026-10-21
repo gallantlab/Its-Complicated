@@ -179,8 +179,11 @@ void AExperimentSpectatorController::TrySetViewTargetToPlayer()
 		{
 			if (camera && camera->GetPostProcessEffect() == EExperimentPostProcessEffect::SemanticSegmentation)
 			{
+				ConfigureSemanticLabels();
 				semSegTagger = NewObject<USemSegTagger>(this);
 				semSegTagger->SetLabelMap(semanticLabels);
+				semSegTagger->SetTagLabelMap(semanticTagLabels);
+				semSegTagger->SetDefaultLabel(defaultSemanticLabel);
 				semSegTagger->TagActorsInLevel(*GetWorld());
 				semSegTagger->RegisterSpawnHandler(GetWorld());
 				break;
@@ -196,8 +199,6 @@ void AExperimentSpectatorController::TrySetViewTargetToPlayer()
 	playerPawn->GetAttachedActors(attachedActors);
 	for (int i = 0; i < attachedActors.Num(); i++)
 		UE_LOG(LogExperiment, Log, TEXT("Found attached actor %s"), *attachedActors[i]->GetName());
-
-	CaptureCameras();
 }
 
 

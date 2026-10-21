@@ -38,6 +38,19 @@ public:
 	void SetLabelMap(const TMap<TSubclassOf<AActor>, uint8>& newLabelMap);
 
 	/**
+	 * Replaces the actor-tag-to-label map. A tag entry overrides the class map,
+	 * so it singles out individual level actors, such as a sky sphere.
+	 * @param newTagLabelMap  Map from actor tag to stencil value.
+	 */
+	void SetTagLabelMap(const TMap<FName, uint8>& newTagLabelMap);
+
+	/**
+	 * Sets the label given to actors that match no map entry.
+	 * @param newDefaultLabel  Stencil value for unmatched actors. 0 (the default) leaves them untagged.
+	 */
+	void SetDefaultLabel(uint8 newDefaultLabel);
+
+	/**
 	 * Tags every actor currently in the world.
 	 * @param world  The world whose actors to tag.
 	 */
@@ -64,7 +77,7 @@ private:
 	 * Returns the label for the actor. When several map entries match, the
 	 * most derived class wins, so a subclass entry overrides its parent's.
 	 * @param actor  The actor to look up.
-	 * @return The stencil value, or 0 when no entry matches.
+	 * @return The stencil value, or the default label when no entry matches.
 	 */
 	uint8 GetLabel(const AActor& actor) const;
 
@@ -74,6 +87,13 @@ private:
 	/** Actor class to stencil value. */
 	UPROPERTY()
 	TMap<TSubclassOf<AActor>, uint8> labelMap;
+
+	/** Actor tag to stencil value. Checked before the class map. */
+	UPROPERTY()
+	TMap<FName, uint8> tagLabelMap;
+
+	/** Stencil value for actors that match no map entry. 0 leaves them untagged. */
+	uint8 defaultLabel = 0;
 
 	/** Delegate bound to OnActorSpawned, registered with the world by RegisterSpawnHandler. */
 	FOnActorSpawned::FDelegate actorSpawnedDelegate;
