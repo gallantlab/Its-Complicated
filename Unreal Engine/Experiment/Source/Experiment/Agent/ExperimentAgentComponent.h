@@ -1,0 +1,89 @@
+// Copyright (c) Gallant Lab. All Rights Reserved.
+//
+// Portions of this file are adapted from the CARLA open-source autonomous driving simulator
+// (https://github.com/carla-simulator/carla).
+// Copyright (c) 2017 Computer Vision Center (CVC) at the Universitat Autonoma de Barcelona (UAB).
+// Licensed under the MIT License (https://opensource.org/licenses/MIT).
+
+#pragma once
+
+#include "Components/SceneComponent.h"
+#include "ExperimentAgentComponentVisitor.h"
+#include "ExperimentAgentComponent.generated.h"
+
+/**
+ * Abstract base component for all MRI experiment agents (subject pawn, NPCs, etc.).
+ *
+ * Attach subclasses of this component to any Actor that should be tracked and
+ * visited by the logging system. During BeginPlay, the component marks itself as
+ * registered (if bRegisterAgentComponent is true), and during EndPlay it clears
+ * the mark. The spectator controller enumerates registered agent components in
+ * the world each replay tick.
+ *
+ * Use AcceptVisitor to let a visitor (e.g. ExperimentState) read out the
+ * current state information for this agent each frame.
+ */
+UCLASS(Abstract)
+class EXPERIMENT_API UExperimentAgentComponent : public USceneComponent
+{
+	GENERATED_BODY()
+
+public:
+
+	/**
+	 * Constructs the component. 
+	 * @param ObjectInitializer  Unreal object initializer forwarded to the parent class.
+	 */
+	UExperimentAgentComponent(const FObjectInitializer &ObjectInitializer);
+
+	/**
+	 * Returns a unique identifier for this component instance derived from its pointer hash.
+	 * This is used to tell two instances of the same class apart, e.g. two cars
+	 * @return Hashed pointer value used as a stable per-instance ID.
+	 */
+	uint32 GetId() const
+	{
+		return GetTypeHash(this);
+	}
+
+	/**
+	 * Accepts a visitor and calls the visitor's Visit method with this component.
+	 *
+	 * Override in subclasses to call the appropriate typed Visit overload so
+	 * that visitors can distinguish between different agent component types.
+	 * @param Visitor  The visitor object that will read state from this component.
+	 */
+	virtual void AcceptVisitor(IExperimentAgentComponentVisitor &Visitor) const;
+
+	/**
+	 * Returns whether this component is currently marked for inclusion in state logging.
+	 * @return true if the component registered itself on BeginPlay and has not ended play.
+	 */
+	bool IsAgentRegistered() const
+	{
+		return bAgentComponentIsRegistered;
+	}
+
+protected:
+
+	/**
+	 * Called when the game starts. Sets bAgentComponentIsRegistered based on
+	 * bRegisterAgentComponent so the logging system knows to include this agent.
+	 */
+	void BeginPlay() override;
+
+	/**
+	 * Called when the actor is removed from the world. Clears bAgentComponentIsRegistered
+	 * so the logging system stops tracking this agent.
+	 * @param EndPlayReason  Reason the actor's EndPlay was triggered.
+	 */
+	void EndPlay(EEndPlayReason::Type EndPlayReason) override;
+
+	/** If true, this component will register itself with the agent registry on BeginPlay. */
+	UPROPERTY(EditAnywhere)
+	bool bRegisterAgentComponent = true;
+
+	/** Indicates whether this component is currently registered with the agent registry. Read-only in editor. */
+	UPROPERTY(VisibleAnywhere, AdvancedDisplay)
+	bool bAgentComponentIsRegistered = false;
+};

@@ -5,3 +5,4 @@
 site/
 *.db
 .vs
+/Unreal Engine/Experiment/Intermediate/
