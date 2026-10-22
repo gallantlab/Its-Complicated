@@ -170,6 +170,14 @@ public:
 protected:
 
 	/**
+	 * Writes additional attributes into the <Frame> tag. The base implementation
+	 * writes none. Override in subclasses to append experiment-specific
+	 * attributes with Experiment_WRITE_ATTRIBUTE_KV.
+	 * @param stream  Output file stream.
+	 */
+	virtual void WriteFrameAttributes(std::ofstream& stream) {}
+
+	/**
 	 * Writes the inner XML content for this frame. Override in subclasses to
 	 * add experiment-specific fields.
 	 * @param stream  Output file stream.

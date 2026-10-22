@@ -60,8 +60,9 @@ void ExperimentState::WriteToFile(ofstream& logFile, int& indentation)
 		<< Experiment_WRITE_ATTRIBUTE_KV("Time", time)
 		<< Experiment_WRITE_ATTRIBUTE_KV("TTL", isTTL)
 		<< Experiment_WRITE_ATTRIBUTE_KV("TotalTTL", totalTTLs)
-		<< Experiment_WRITE_ATTRIBUTE_KV("Points", points)
-		<< ">" << endl;
+		<< Experiment_WRITE_ATTRIBUTE_KV("Points", points);
+	WriteFrameAttributes(logFile);
+	logFile << ">" << endl;
 
 	indentation++;
 	WriteContents(logFile, indentation);

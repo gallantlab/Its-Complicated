@@ -49,6 +49,12 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Example|Task")
 	bool GetDirectionToNearestItem(float& angleDegrees) const;
 
+	/**
+	 * Collects all actors in the replay world tagged as trial items.
+	 * @return The remaining trial boxes.
+	 */
+	TArray<AActor*> GetTrialItems() const;
+
 protected:
 
 	/**
@@ -84,12 +90,6 @@ protected:
 	 * @param text  Text to show.
 	 */
 	void ShowDisplayText(const FString& text);
-
-	/**
-	 * Collects all actors in the replay world tagged as trial items.
-	 * @return The remaining trial boxes.
-	 */
-	TArray<AActor*> GetTrialItems() const;
 
 	/** Boxes present on the previous tick, to detect appearances and collections. */
 	int observedItemCount = 0;

@@ -109,7 +109,10 @@ void AExamplePlayerController::SetupInputComponent()
 	}
 
 	InputComponent->BindKey(EKeys::Escape, IE_Pressed, this, &AExamplePlayerController::HandleEscapePressed);
+#if !UE_BUILD_SHIPPING && !UE_BUILD_TEST
+	// Convenience binding for development; subjects in the scanner only have Escape.
 	InputComponent->BindKey(EKeys::M, IE_Pressed, this, &AExamplePlayerController::HandleEscapePressed);
+#endif
 }
 
 void AExamplePlayerController::HandleEscapePressed()
